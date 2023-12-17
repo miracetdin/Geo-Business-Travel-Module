@@ -19,6 +19,7 @@ const Register = async (req, res, next) => {
 
 	if (error) {
 		return next(Boom.badRequest(error.details[0].message));
+		// return next(Boom.badRequest("selam"));
 	}
 
 	try {

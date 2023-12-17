@@ -1,4 +1,4 @@
-import Travel from "../../models/product";
+import Travel from "../../models/travel";
 import Boom from "boom";
 import TravelSchema from "./validations";
 

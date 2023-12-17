@@ -1,0 +1,39 @@
+# Node.js
+node_modules/
+
+# Dependency directories
+jspm_packages/
+bower_components/
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# IDE
+.vscode/
+.idea/
+
+# Compiled files
+dist/
+out/
+build/
+
+# Logs and databases
+*.log
+*.sqlite
+*.sqlite3
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Production build
+build/
+
+# README file
+README.md
+LICENSE
