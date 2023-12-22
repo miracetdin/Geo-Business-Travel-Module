@@ -1,26 +1,70 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from "mongoose";
 
 const Schema = mongoose.Schema;
 
 const TravelSchema = new Schema({
-  title: {
+  travelId: {
+    type: Number,
+    required: true,
+    unique: true
+  },
+  employeeUsername: {
     type: String,
     required: true,
+    unique: true
   },
-  description: {
+  travelDate: {
+    type: Date,
+    default: Date.now
+  },
+  startLocation: {
+    type: String,
+    required: true
+  },
+  endLocation: {
+    type: String,
+    required: true
+  },
+  invoicePhoto: {
+    type: String,
+    required: true
+  },
+  invoiceInfo: {
+    type: String,
+    required: true
+  },
+  invoiceNote: {
     type: String,
   },
-  price: {
+  invoicePrice: {
     type: Number,
     required: true,
   },
-  photos: [String],
-  createdAt: {
-    type: Date,
-    default: Date.now,
+  priceEstimate: {
+    type: Number,
+    required: true
   },
+  status: {
+    type: String,
+    default: "waiting",
+    enum: [
+      "waiting",
+      "approved",
+      "suspecious"
+    ]
+  },
+  approveByAccountant: {
+    type: String,
+    required: true,
+    unique: true,
+    default: null,
+  },
+  approveDate: {
+    type: Date,
+    default: Date.now
+  }
 });
 
-const Travel = mongoose.model('travel', TravelSchema);
+const Travel = mongoose.model("travel", TravelSchema);
 
 export default Travel;

@@ -4,19 +4,19 @@ const router = express.Router();
 import Travel from "../controllers/travel";
 // import cache from '../cache';
 
-// import grantAccess from "../middlewares/grantAccess";
+import grantAccess from "../middlewares/grantAccess";
 import { verifyAccessToken } from "../helpers/jwt";
 
 router.post(
 	"/",
 	verifyAccessToken,
-	// grantAccess("createAny", "product"),
+	grantAccess("createAny", "travel"),
 	Travel.Create
 );
 router.get(
 	"/:travel_id",
-	// verifyAccessToken,
-	// grantAccess('readAny', 'product'),
+	verifyAccessToken,
+	grantAccess('readAny', 'travel'),
 	// cache.route(),
 	Travel.Get
 );
