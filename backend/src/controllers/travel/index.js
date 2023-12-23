@@ -1,4 +1,5 @@
 import Travel from "../../models/travel";
+import User from "../../models/user";
 import Boom from "boom";
 import TravelSchema from "./validations";
 
@@ -10,15 +11,16 @@ const Create = async (req, res, next) => {
   	return next(Boom.badRequest(error.details[0].message));
   }
 
-  try {
-  	let isTravelIdExists = true;
-  	while(isTravelIdExists) {
-  	  isTravelIdExists = await Travel.findOne({ travelId : input.travelId });
+  // TravelId ==> MongoDB Id
+  // try {
+  // 	let isTravelIdExists = true;
+  // 	while(isTravelIdExists) {
+  // 	  isTravelIdExists = await Travel.findOne({ travelId : input.travelId });
 
-      if (isTravelIdExists) {
-      	input.travelId++;
-      }
-	}
+  //     if (isTravelIdExists) {
+  //     	input.travelId++;
+  //     }
+	// }
 
 	// input.photo = JSON.parse(input.photo);
 
@@ -26,9 +28,9 @@ const Create = async (req, res, next) => {
 	const savedData = await travel.save();
 
 	res.json(savedData);
-  } catch (e) {
-	next(e);
-  }
+  // } catch (e) {
+	// next(e);
+  // }
 };
 
 const Get = async (req, res, next) => {
@@ -41,7 +43,21 @@ const Get = async (req, res, next) => {
   try {
   	const travel = await Travel.findById(travel_id);
 
-	res.json(travel);
+    const { user_id } = req.payload;
+  
+    let user = null;
+    try {
+    	user = await User.findById(user_id).select("-password -__v");
+    } catch (e) {
+	    next(e);
+    }
+
+    if (user.role !== "employee" || user.username === travel.employeeUsername) {
+      res.json(travel);
+    }
+    else {
+      res.json({ message: "This record does not belong to you!" })
+    }  
   } catch (e) {
   	next(e);
   }
@@ -85,13 +101,32 @@ const GetList = async (req, res, next) => {
   	page = 1;
   }
 
+  const { user_id } = req.payload;
+  
+  let user = null;
+  try {
+  	user = await User.findById(user_id).select("-password -__v");
+  } catch (e) {
+	  next(e);
+  }
+
   const skip = (parseInt(page) - 1) * limit;
 
   try {
-  	const travels = await Travel.find({})
+    let travels = null;
+    
+    if (user.role === "employee") {
+      travels = await Travel.find({ employeeUsername: user.username })
   	  .sort({ createdAt: -1 })
   	  .skip(skip)
   	  .limit(limit);
+    }
+    else {
+      travels = await Travel.find({})
+  	  .sort({ createdAt: -1 })
+  	  .skip(skip)
+  	  .limit(limit);
+    }
 
 	  res.json(travels);
   } catch (e) {

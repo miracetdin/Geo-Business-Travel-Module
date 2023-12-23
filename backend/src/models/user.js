@@ -32,7 +32,7 @@ const UserSchema = new Schema({
     type: String,
     default: "employee",
     enum: [
-      "admin",  // hesap oluşturulduğunda hesap türünü onaylar  
+      "admin",  // TODO: hesap oluşturulduğunda hesap türünü onaylar  
       "accountant",
       "employee"
     ]

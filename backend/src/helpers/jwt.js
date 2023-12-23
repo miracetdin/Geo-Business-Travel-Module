@@ -45,10 +45,10 @@ const verifyAccessToken = (req, res, next) => {
   });
 };
 
-const signRefreshToken = (accountant_id) => {
+const signRefreshToken = (user_id) => {
   return new Promise((resolve, reject) => {
   	const payload = {
-  	  accountant_id,
+  	  user_id,
   	};
   	const options = {
   	  expiresIn: "180d",
@@ -61,7 +61,7 @@ const signRefreshToken = (accountant_id) => {
         reject(Boom.internal());
       }
 
-	  redis.set(accountant_id, token, "EX", 180 * 24 * 60 * 60);
+	  redis.set(user_id, token, "EX", 180 * 24 * 60 * 60);
 
 	  resolve(token);
 	});
@@ -78,15 +78,15 @@ const verifyRefreshToken = async (refresh_token) => {
   	  	  return reject(Boom.unauthorized());
   	  	}
 
-		const { accountant_id } = payload;
-		const accountant_token = await redis.get(accountant_id);
+		const { user_id } = payload;
+		const user_token = await redis.get(user_id);
 
-		if (!accountant_token) {
+		if (!user_token) {
 		  return reject(Boom.unauthorized());
 		}
 
-		if (refresh_token === accountant_token) {
-		  return resolve(accountant_id);
+		if (refresh_token === user_token) {
+		  return resolve(user_id);
 		}
 	  }
 	);

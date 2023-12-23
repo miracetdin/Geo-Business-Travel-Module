@@ -21,8 +21,23 @@ router.get(
 	Travel.Get
 );
 // router.get('/', cache.route(), Product.GetList);
-router.get("/", Travel.GetList);
-router.put("/:travel_id", Travel.Update);
-router.delete("/:travel_id", Travel.Delete);
+router.get(
+	"/",
+	verifyAccessToken,
+	grantAccess("readAny", "travel"), 
+	Travel.GetList
+);
+router.put(
+	"/:travel_id", 
+	verifyAccessToken,
+	grantAccess("updateAny", "travel"),
+	Travel.Update
+);
+router.delete(
+	"/:travel_id",
+	verifyAccessToken,
+	grantAccess("deleteAny", "travel"), 
+	Travel.Delete
+);
 
 export default router;

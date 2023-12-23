@@ -3,11 +3,11 @@ import mongoose, { Schema } from "mongoose";
 const Schema = mongoose.Schema;
 
 const TravelSchema = new Schema({
-  travelId: {
-    type: Number,
-    required: true,
-    unique: true
-  },
+  // travelId: {
+  //   type: Number,
+  //   required: true,
+  //   unique: true
+  // },
   employeeUsername: {
     type: String,
     required: true,
@@ -55,8 +55,7 @@ const TravelSchema = new Schema({
   },
   approveByAccountant: {
     type: String,
-    required: true,
-    unique: true,
+    // required: true,
     default: null,
   },
   approveDate: {

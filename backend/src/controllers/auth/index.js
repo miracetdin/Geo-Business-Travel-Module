@@ -92,6 +92,7 @@ const Login = async (req, res, next) => {
   }
 };
 
+// TODO: Refresh token ile kullanıcının tekrar açtığı her sayfada tanınması
 const RefreshToken = async (req, res, next) => {
   const { refresh_token } = req.body;
 
@@ -132,9 +133,20 @@ const Logout = async (req, res, next) => {
 };
 
 const Me = async (req, res, next) => {
-  const { user_id } = req.payload;
-
+  // const { user_id: id } = req.payload;
   try {
+  const { refresh_token } = req.body;
+  if (!refresh_token) {
+    throw Boom.badRequest();
+  }
+
+  const user_id = await verifyRefreshToken(refresh_token);
+  const data = await redis.get(user_id);
+
+  if (!data) {
+    throw Boom.badRequest();
+  }
+
   	const user = await User.findById(user_id).select("-password -__v");
 
 	res.json(user);
