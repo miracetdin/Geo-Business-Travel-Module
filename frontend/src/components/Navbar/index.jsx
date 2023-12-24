@@ -1,10 +1,24 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link } from "react-router-dom";
+import { Link, useHistory  } from "react-router-dom";
 import styles from './styles.module.css';
 import myImage from '../../images/logo.png';
+import TokenContext from "../../contexts/tokenContext";
 
-function index() {
+function Navbar() {
+
+  const history = useHistory();
+  const { updateAccessToken, updateRefreshToken } = useContext(TokenContext);
+
+  const handleLogout = () => {
+    // AccessToken ve RefreshToken'ı null yap
+    updateAccessToken(null);
+    updateRefreshToken(null);
+
+    // Ana sayfaya yönlendir
+    history.push("/");
+  };
+
   return (
     <>
       <nav className={styles.navbar} >
@@ -26,7 +40,7 @@ function index() {
             <div className="col-6">
               <ul className="d-flex justify-content-end">
                 <li className="ml-auto">
-                  <Link to="/logout">Logout</Link>
+                  <Link to="/" onClick={handleLogout}>Logout</Link>
                 </li>
               </ul>
             </div>
@@ -37,4 +51,4 @@ function index() {
   )
 };
 
-export default index;
+export default Navbar;

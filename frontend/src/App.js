@@ -9,8 +9,10 @@ import Login from './components/Login/index';
 import Signup from './components/Signup/index';
 import Navbar from './components/Navbar/index';
 import Profile from './components/Profile/index';
+import Travels from './components/Travels/index';
 import { useEffect, useState } from 'react';
 import { TokenProvider } from './contexts/tokenContext';
+import TravelDetails from './components/TravelDetails';
 
 function App() {
   const [currentPath, setCurrentPath] = useState("/");
@@ -38,7 +40,8 @@ function App() {
       <TokenProvider>
         <Router>
           <div>
-          {showNavbar && <Navbar />}
+          {/* {showNavbar && <Navbar />} */}
+          <Navbar />
             {
               showHome &&
               <div>
@@ -67,6 +70,12 @@ function App() {
               </Route>
               <Route path="/profile">
                 <Profile />
+              </Route>
+              <Route path="/travel">
+                <Travels />
+              </Route>
+              <Route path="/travel-details/:id">
+                <TravelDetails />
               </Route>
             </Switch>
           </div>
