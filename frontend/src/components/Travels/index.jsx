@@ -2,22 +2,30 @@ import React, { Fragment, useContext, useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { travelApi, travelApproveApi } from "../api/apiFunctions";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import TokenContext from "../../contexts/tokenContext";
 import { useHistory } from "react-router-dom";
 import Navbar from "../Navbar/index";
 import style from "./styles.module.css";
 
 function Travels() {
-  const page = 1;
+  // const page = 1;
+  const [currentPage, setCurrentPage] = useState(1);
   const apiUrl = "http://localhost:4000";
   const history = useHistory();
   const { accessToken } = useContext(TokenContext);
 
-  const { data, isLoading } = useSWR(`${apiUrl}/travel${page}`, async (url) => {
-    const response = await travelApi(accessToken, page, "GET");
-    return response;
-  });
+  const { data, isLoading } = useSWR(
+    `${apiUrl}/travel${currentPage}`,
+    async (url) => {
+      const response = await travelApi(accessToken, currentPage, "GET");
+      return response;
+    }
+  );
+
+  const onPageChange = (event) => {
+    setCurrentPage(event.first / event.rows + 1);
+  };
 
   const renderDetailsButton = (rowData) => {
     return (
@@ -46,7 +54,8 @@ function Travels() {
   };
 
   const handleApproveClick = async (rowData) => {
-    const result = await travelApproveApi(accessToken, rowData._id);
+    await travelApproveApi(accessToken, rowData._id);
+    mutate(`${apiUrl}/travel${currentPage}`);
   };
 
   let counter = -1;
@@ -84,6 +93,10 @@ function Travels() {
                   value={data}
                   tableStyle={{ minWidth: "50rem" }}
                   rowClassName={rowClassName}
+                  onPage={onPageChange} // Add this line for pagination
+                  paginator={true} // Enable paginator
+                  rows={10} // Number of rows per page
+                  totalRecords={data ? data.length : 0} // Total number of records (for paginator)
                 >
                   <Column
                     className={style.customColumn}

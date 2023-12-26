@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useEffect, useState } from "react";
+import React, { Fragment, useContext } from "react";
 import TokenContext from "../../contexts/tokenContext";
 import { profileApi } from "../api/apiFunctions";
 import useSWR from "swr";
