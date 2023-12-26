@@ -57,16 +57,16 @@ function Travels() {
 
   const renderSuspiciousCell = (rowData) => {
     const cellStyle = {
-      color: rowData.suspicious === 'yes' ? 'red' : 'green',
+      color: rowData.suspicious === "yes" ? "red" : "green",
     };
-  
+
     return <span style={cellStyle}>{rowData.suspicious}</span>;
   };
-  
+
   const renderDateCell = (rowData) => {
     const rawDate = new Date(rowData.travelDate);
-    const formattedDate = rawDate.toLocaleDateString(); // Tarih formatını özelleştirebilirsiniz
-  
+    const formattedDate = rawDate.toLocaleDateString();
+
     return <span>{formattedDate}</span>;
   };
 
@@ -100,6 +100,11 @@ function Travels() {
                     className={style.customColumn}
                     field="startLocation"
                     header="Start Location"
+                  ></Column>
+                  <Column
+                    className={style.customColumn}
+                    field="endLocation"
+                    header="End Location"
                   ></Column>
                   {/* <Column className={style.customColumn} field="invoicePhoto" header="Invoice Photo"></Column> */}
                   {/* <Column className={style.customColumn} field="invoiceInfo" header="Invoice Info"></Column> */}

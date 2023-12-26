@@ -7,6 +7,8 @@ export const PopupProvider = ({ children }) => {
   const [showLoginPopup, setShowLoginPopup] = useState(false);
   const [signupErrorMessage, setSignupErrorMessage] = useState("");
   const [showSignupPopup, setShowSignupPopup] = useState(false);
+  const [invoicePhoto, setInvoicePhoto] = useState("");
+  const [showInvoicePhotoPopup, setshowInvoicePhotoPopup] = useState(false);
 
   const updateLoginErrorMessage = (newLoginErrorMessage) => {
     setLoginErrorMessage(newLoginErrorMessage);
@@ -20,6 +22,12 @@ export const PopupProvider = ({ children }) => {
   const updateShowSignupPopup = (newShowSignupPopup) => {
     setShowSignupPopup(newShowSignupPopup);
   };
+  const updateInvoicePhoto = (newInvoicePhoto) => {
+    setInvoicePhoto(newInvoicePhoto);
+  };
+  const updateShowInvoicePhotoPopup = (newShowInvoicePhotoPopup) => {
+    setshowInvoicePhotoPopup(newShowInvoicePhotoPopup);
+  };
   
   return (
     <PopupContext.Provider
@@ -31,7 +39,11 @@ export const PopupProvider = ({ children }) => {
         signupErrorMessage,
         updateSignupErrorMessage,
         showSignupPopup,
-        updateShowSignupPopup
+        updateShowSignupPopup,
+        invoicePhoto,
+        updateInvoicePhoto,
+        showInvoicePhotoPopup,
+        updateShowInvoicePhotoPopup
       }}
     >
       {children}
