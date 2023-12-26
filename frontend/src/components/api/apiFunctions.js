@@ -127,4 +127,40 @@ const travelApproveApi = async (access_token, travelId) => {
   }
 };
 
-export { loginApi, profileApi, travelApi, travelDetailsApi, travelApproveApi };
+const signupApi = async (username, name, surname, email, password, role) => {
+  try {
+    const response = await fetch(`${apiUrl}/auth/register`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: username,
+        name: name,
+        surname: surname,
+        email: email,
+        password: password,
+        role: role
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error:", error);
+    return { error: "Request failed!" };
+  }
+};
+
+export { 
+  loginApi, 
+  profileApi, 
+  travelApi, 
+  travelDetailsApi, 
+  travelApproveApi, 
+  signupApi 
+};

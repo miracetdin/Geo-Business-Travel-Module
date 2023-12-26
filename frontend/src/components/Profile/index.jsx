@@ -2,6 +2,8 @@ import React, { Fragment, useContext, useEffect, useState } from "react";
 import TokenContext from "../../contexts/tokenContext";
 import { profileApi } from "../api/apiFunctions";
 import useSWR from "swr";
+import Navbar from "../Navbar/index";
+import style from "./styles.module.css";
 
 function Profile() {
   const { accessToken, refreshToken } = useContext(TokenContext);
@@ -20,30 +22,40 @@ function Profile() {
 
   return (
     <Fragment>
+      <Navbar />
       <div className="container mt-3 mb-3">
         <div className="row d-flex justify-content-between">
           <div className="login-card d-flex flex-column align-items-center">
-            <div className="card">
-              <h2>Profile</h2>
+            <div
+              className="card mt-5 pt-2"
+              style={{ backgroundColor: "#F4D03F", border: "none" }}
+            >
+              <h2 className="mb-5">Profile</h2>
               {!isLoading && (
-                <div>
-                  <div>
-                    <strong>_id:</strong> {data._id}
+                <div className={style.profileContainer}>
+                  <div className={style.profileItem}>
+                    <strong>_id:</strong>
+                    <span>{data._id}</span>
                   </div>
-                  <div>
-                    <strong>username:</strong> {data.username}
+                  <div className={style.profileItem}>
+                    <strong>Username:</strong>
+                    <span>{data.username}</span>
                   </div>
-                  <div>
-                    <strong>name:</strong> {data.name}
+                  <div className={style.profileItem}>
+                    <strong>Name:</strong>
+                    <span>{data.name}</span>
                   </div>
-                  <div>
-                    <strong>surname:</strong> {data.surname}
+                  <div className={style.profileItem}>
+                    <strong>Surname:</strong>
+                    <span>{data.surname}</span>
                   </div>
-                  <div>
-                    <strong>email:</strong> {data.email}
+                  <div className={style.profileItem}>
+                    <strong>Email:</strong>
+                    <span>{data.email}</span>
                   </div>
-                  <div>
-                    <strong>role:</strong> {data.role}
+                  <div className={style.profileItem}>
+                    <strong>Role:</strong>
+                    <span>{data.role}</span>
                   </div>
                 </div>
               )}

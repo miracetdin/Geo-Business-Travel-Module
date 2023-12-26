@@ -1,36 +1,32 @@
-import React, { useContext } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Link, useHistory  } from "react-router-dom";
-import styles from './styles.module.css';
-import myImage from '../../images/logo.png';
+import React, { useContext } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { Link, useHistory } from "react-router-dom";
+import styles from "./styles.module.css";
+import myImage from "../../images/logo.png";
 import TokenContext from "../../contexts/tokenContext";
 
 function Navbar() {
-
   const history = useHistory();
   const { updateAccessToken, updateRefreshToken } = useContext(TokenContext);
 
   const handleLogout = () => {
-    // AccessToken ve RefreshToken'ı null yap
     updateAccessToken(null);
     updateRefreshToken(null);
-
-    // Ana sayfaya yönlendir
-    history.push("/");
+    history.push("/login");
   };
 
   return (
     <>
-      <nav className={styles.navbar} >
+      <nav className={styles.navbar}>
         <div className="container">
           <div className="row">
             <div className="col-6">
               <ul>
                 <li>
-                  <img src={myImage} height={"30px"} />
+                  <img src={myImage} height={"35px"} />
                 </li>
                 <li>
-                <Link to="/profile">Profile</Link>
+                  <Link to="/profile">Profile</Link>
                 </li>
                 <li>
                   <Link to="/travel">Travel</Link>
@@ -40,15 +36,17 @@ function Navbar() {
             <div className="col-6">
               <ul className="d-flex justify-content-end">
                 <li className="ml-auto">
-                  <Link to="/" onClick={handleLogout}>Logout</Link>
+                  <Link to="/login" onClick={handleLogout}>
+                    Logout
+                  </Link>
                 </li>
               </ul>
             </div>
           </div>
         </div>
-      </nav>  
+      </nav>
     </>
-  )
-};
+  );
+}
 
 export default Navbar;

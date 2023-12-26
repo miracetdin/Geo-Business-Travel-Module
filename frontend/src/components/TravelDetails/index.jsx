@@ -5,6 +5,7 @@ import TokenContext from "../../contexts/tokenContext";
 import useSWR from "swr";
 import { DataTable } from 'primereact/datatable';
 import { Column } from 'primereact/column';
+import Navbar from '../Navbar/index';
 
 function TravelDetails() {
   const { id } = useParams(); // ID'yi al
@@ -31,6 +32,7 @@ function TravelDetails() {
 
   return (
     <Fragment>
+      <Navbar />
       <div className="container mt-3 mb-3">
         <div className="row d-flex justify-content-between">
           <div className="login-card d-flex flex-column align-items-center">

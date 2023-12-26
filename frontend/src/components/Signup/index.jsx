@@ -1,29 +1,57 @@
-import React, { Fragment } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import Form from './form';
-import style from './styles.module.css';
+import React, { Fragment, useContext } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Form from "./form";
+import style from "./styles.module.css";
+import PopupContext from "../../contexts/popupContext";
+import Popup from "./popup";
 
-function index() {
+function Signup() {
+  const {
+    updateSignupErrorMessage,
+    updateShowSignupPopup,
+    signupErrorMessage,
+  } = useContext(PopupContext);
+
+  const closePopup = () => {
+    updateShowSignupPopup(false);
+    updateSignupErrorMessage("");
+  };
+
   return (
     <Fragment>
       <div className="container mt-3 mb-3">
         <div className="row d-flex justify-content-between">
-          <div className="login-card d-flex flex-column align-items-center">
-            <div className="card">
+          {!signupErrorMessage && (
+            <div className="login-card d-flex flex-column align-items-center">
+              <div className="card mt-2" style={{ borderColor: "#333" }}>
                 <div className="p-5">
                   <h2 className="mb-4">Sign Up</h2>
                   <Form />
                   <br />
                   <div className="login">
-                    <button className={style.button}>Login</button>
+                    <button
+                      className={style.button}
+                      style={{ backgroundColor: "#F4D03F" }}
+                    >
+                      Login
+                    </button>
                   </div>
                 </div>
+              </div>
             </div>
-          </div>
+          )}
+          <div id="popup-root"></div>
+          {signupErrorMessage && (
+            <Popup
+              message={signupErrorMessage}
+              onClose={closePopup}
+              style={style.popupStyle}
+            />
+          )}
         </div>
       </div>
     </Fragment>
-  )
-};
+  );
+}
 
-export default index;
+export default Signup;
