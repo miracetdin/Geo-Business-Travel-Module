@@ -11,6 +11,7 @@ const TravelSchema = Joi.object({
   invoiceNote: Joi.string(),
   invoicePrice: Joi.number().required(),
   priceEstimate: Joi.number().required(),
+  suspicious: Joi.string().required(),
   status: Joi.string().required(),
   // approveByAccountant: Joi.string().required(),
   // approveDate: Joi.date().required(),

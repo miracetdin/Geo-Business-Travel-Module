@@ -44,13 +44,21 @@ const TravelSchema = new Schema({
     type: Number,
     required: true
   },
+  suspicious: {
+    type: String,
+    default: "no",
+    enum: [
+      "no",
+      "yes",
+    ]
+  },
   status: {
     type: String,
     default: "waiting",
     enum: [
       "waiting",
       "approved",
-      "suspecious"
+      "rejected"
     ]
   },
   approveByAccountant: {

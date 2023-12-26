@@ -49,9 +49,25 @@ function Travels() {
     const result = await travelApproveApi(accessToken, rowData._id);
   };
 
+  let counter = -1;
   const rowClassName = (rowData, rowIndex) => {
-    console.log("row: ", rowIndex);
-    return rowIndex % 2 === 0 ? style.evenRow : style.oddRow;
+    counter++;
+    return counter % 2 === 0 ? style.evenRow : style.oddRow;
+  };
+
+  const renderSuspiciousCell = (rowData) => {
+    const cellStyle = {
+      color: rowData.suspicious === 'yes' ? 'red' : 'green',
+    };
+  
+    return <span style={cellStyle}>{rowData.suspicious}</span>;
+  };
+  
+  const renderDateCell = (rowData) => {
+    const rawDate = new Date(rowData.travelDate);
+    const formattedDate = rawDate.toLocaleDateString(); // Tarih formatını özelleştirebilirsiniz
+  
+    return <span>{formattedDate}</span>;
   };
 
   return (
@@ -61,7 +77,7 @@ function Travels() {
         <div className="row d-flex justify-content-between">
           <div className="login-card d-flex flex-column align-items-center">
             <div className="card">
-              <h2>Travels</h2>
+              <h2 className="pt-3">Travels</h2>
               {!isLoading && (
                 <DataTable
                   className={style.customDatatable}
@@ -78,6 +94,7 @@ function Travels() {
                     className={style.customColumn}
                     field="travelDate"
                     header="Travel Date"
+                    body={renderDateCell}
                   ></Column>
                   <Column
                     className={style.customColumn}
@@ -99,6 +116,12 @@ function Travels() {
                   ></Column>
                   <Column
                     className={style.customColumn}
+                    field="suspicious"
+                    header="Suspicious"
+                    body={renderSuspiciousCell}
+                  ></Column>
+                  <Column
+                    className={style.customColumn}
                     field="status"
                     header="Status"
                   ></Column>
@@ -111,6 +134,7 @@ function Travels() {
                     className={style.customColumn}
                     field="approveDate"
                     header="Approve Date"
+                    body={renderDateCell}
                   ></Column>
                   <Column
                     className={style.customDetailsColumn}
