@@ -1,6 +1,6 @@
 import React, { Fragment, useContext } from "react";
 import { useParams } from "react-router-dom";
-import { travelDetailsApi } from "../api/apiFunctions";
+import { travelDetailsApi, usersApi } from "../api/apiFunctions";
 import TokenContext from "../../contexts/tokenContext";
 import useSWR from "swr";
 import { DataTable } from "primereact/datatable";
@@ -14,8 +14,26 @@ function TravelDetails() {
   const { id } = useParams();
   const travelId = id;
   const apiUrl = "http://localhost:4000";
+  const { accessToken, refreshToken } = useContext(TokenContext);
+  const {
+    invoicePhoto,
+    updateInvoicePhoto,
+    showInvoicePhotoPopup,
+    updateShowInvoicePhotoPopup,
+  } = useContext(PopupContext);
 
-  const { accessToken } = useContext(TokenContext);
+  const { data: userList, isLoading: userListIsLoading } = useSWR(
+    `${apiUrl}/auth/users`,
+    async (url) => {
+      const response = await usersApi(accessToken, refreshToken, "POST");
+      return response;
+    }
+  );
+
+  const findUserByName = (username) => {
+    const user = userList.find((user) => user.username === username);
+    return user ? `${user.name} ${user.surname}` : "";
+  };
 
   const { data, isLoading } = useSWR(
     `${apiUrl}/travel/${travelId}`,
@@ -24,15 +42,7 @@ function TravelDetails() {
       return response;
     }
   );
-
   const dataArray = [data];
-
-  const {
-    invoicePhoto,
-    updateInvoicePhoto,
-    showInvoicePhotoPopup,
-    updateShowInvoicePhotoPopup,
-  } = useContext(PopupContext);
 
   function handleInvoicePhotoPopup(rowData) {
     updateInvoicePhoto(rowData.invoicePhoto);
@@ -52,13 +62,6 @@ function TravelDetails() {
     return <span style={cellStyle}>{rowData.suspicious}</span>;
   };
 
-  const renderDateCell = (rowData) => {
-    const rawDate = new Date(rowData.travelDate);
-    const formattedDate = rawDate.toLocaleDateString();
-
-    return <span>{formattedDate}</span>;
-  };
-
   const renderImageCell = (rowData) => {
     const handleImageClick = () => {
       handleInvoicePhotoPopup(rowData);
@@ -73,6 +76,17 @@ function TravelDetails() {
     );
   };
 
+  const renderStatusCell = (rowData) => {
+    let cellStyle = { color: "black" };
+    if (rowData.status === "approved") {
+      cellStyle = { color: "green" };
+    }
+    if (rowData.status === "rejected") {
+      cellStyle = { color: "red" };
+    }
+    return <span style={cellStyle}>{rowData.status}</span>;
+  };
+
   return (
     <Fragment>
       <Navbar />
@@ -81,18 +95,18 @@ function TravelDetails() {
           <div className="login-card d-flex flex-column align-items-center">
             <div className="card">
               <h2 className="pt-3">Travel Details: </h2>
-              {!isLoading && (
+              {!isLoading && !userListIsLoading && (
                 <DataTable value={dataArray} tableStyle={{ minWidth: "50rem" }}>
                   <Column
                     className={style.customColumn}
                     field="employeeUsername"
                     header="Employee"
+                    body={(rowData) => findUserByName(rowData.employeeUsername)}
                   ></Column>
                   <Column
                     className={style.customColumn}
                     field="travelDate"
                     header="Travel Date"
-                    body={renderDateCell}
                   ></Column>
                   <Column
                     className={style.customColumn}
@@ -140,17 +154,20 @@ function TravelDetails() {
                     className={style.customColumn}
                     field="status"
                     header="Status"
+                    body={renderStatusCell}
                   ></Column>
                   <Column
                     className={style.customColumn}
                     field="approveByAccountant"
-                    header="Approve By Accountant"
+                    header="Approve/Reject By Accountant"
+                    body={(rowData) =>
+                      findUserByName(rowData.approveByAccountant)
+                    }
                   ></Column>
                   <Column
                     className={style.customColumn}
                     field="approveDate"
-                    header="Approve Date"
-                    body={renderDateCell}
+                    header="Approve/Reject Date"
                   ></Column>
                 </DataTable>
               )}

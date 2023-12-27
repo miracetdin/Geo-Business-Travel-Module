@@ -50,6 +50,31 @@ const profileApi = async (access_token, refresh_token) => {
   }
 };
 
+const usersApi = async (access_token, refresh_token) => {
+  try {
+    const response = await fetch(`${apiUrl}/auth/users`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${access_token}`
+      },
+      body: JSON.stringify({
+        refresh_token: `${refresh_token}`
+      })
+    })
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error:", error);
+    return { error: "Request failed!" };
+  }
+};
+
 const travelApi = async (access_token, page) => {
   try {
     const response = await fetch(`${apiUrl}/travel/?page=${page}`, {
@@ -159,7 +184,8 @@ const signupApi = async (username, name, surname, email, password, role) => {
 
 export { 
   loginApi, 
-  profileApi, 
+  profileApi,
+  usersApi, 
   travelApi, 
   travelDetailsApi, 
   travelApproveApi, 

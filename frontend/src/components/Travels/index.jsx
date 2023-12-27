@@ -1,7 +1,12 @@
 import React, { Fragment, useContext, useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { travelApi, travelApproveApi } from "../api/apiFunctions";
+import {
+  travelApi,
+  travelApproveApi,
+  usersApi,
+  profileApi,
+} from "../api/apiFunctions";
 import useSWR, { mutate } from "swr";
 import TokenContext from "../../contexts/tokenContext";
 import { useHistory } from "react-router-dom";
@@ -12,7 +17,7 @@ function Travels() {
   const [currentPage, setCurrentPage] = useState(1);
   const apiUrl = "http://localhost:4000";
   const history = useHistory();
-  const { accessToken } = useContext(TokenContext);
+  const { accessToken, refreshToken } = useContext(TokenContext);
 
   const { data, isLoading } = useSWR(
     `${apiUrl}/travel${currentPage}`,
@@ -21,6 +26,27 @@ function Travels() {
       return response;
     }
   );
+
+  const { data: userList, isLoading: userListIsLoading } = useSWR(
+    `${apiUrl}/auth/users`,
+    async (url) => {
+      const response = await usersApi(accessToken, refreshToken, "POST");
+      return response;
+    }
+  );
+
+  const { data: accountantData, isLoading: accountantIsLoading } = useSWR(
+    `${apiUrl}/auth/me`,
+    async (url) => {
+      const response = await profileApi(accessToken, refreshToken, "POST");
+      return response;
+    }
+  );
+
+  const findUserByName = (username) => {
+    const user = userList.find((user) => user.username === username);
+    return user ? `${user.name} ${user.surname}` : "";
+  };
 
   const onPageChange = (event) => {
     setCurrentPage(event.first / event.rows + 1);
@@ -72,7 +98,7 @@ function Travels() {
     const month = String(currentDate.getMonth() + 1).padStart(2, "0");
     const year = currentDate.getFullYear();
     const date = `${day}.${month}.${year}`;
-    const accountant = "tayyip";
+    const accountant = accountantData.username;
     await travelApproveApi(
       accessToken,
       rowData._id,
@@ -84,13 +110,13 @@ function Travels() {
   };
 
   const handleRejectClick = async (rowData) => {
-    const aprovalStatus = "reject";
+    const aprovalStatus = "rejected";
     const currentDate = new Date();
     const day = String(currentDate.getDate()).padStart(2, "0");
     const month = String(currentDate.getMonth() + 1).padStart(2, "0");
     const year = currentDate.getFullYear();
     const date = `${day}.${month}.${year}`;
-    const accountant = "tayyip";
+    const accountant = accountantData.username;
     await travelApproveApi(
       accessToken,
       rowData._id,
@@ -115,6 +141,17 @@ function Travels() {
     return <span style={cellStyle}>{rowData.suspicious}</span>;
   };
 
+  const renderStatusCell = (rowData) => {
+    let cellStyle = { color: "black" };
+    if (rowData.status === "approved") {
+      cellStyle = { color: "green" };
+    }
+    if (rowData.status === "rejected") {
+      cellStyle = { color: "red" };
+    }
+    return <span style={cellStyle}>{rowData.status}</span>;
+  };
+
   return (
     <Fragment>
       <Navbar />
@@ -123,7 +160,7 @@ function Travels() {
           <div className="login-card d-flex flex-column align-items-center">
             <div className="card">
               <h2 className="pt-3">Travels</h2>
-              {!isLoading && (
+              {!isLoading && !userListIsLoading && !accountantIsLoading && (
                 <DataTable
                   className={style.customDatatable}
                   value={data}
@@ -139,6 +176,7 @@ function Travels() {
                     className={style.customColumn}
                     field="employeeUsername"
                     header="Employee"
+                    body={(rowData) => findUserByName(rowData.employeeUsername)}
                   ></Column>
                   <Column
                     className={style.customColumn}
@@ -178,11 +216,15 @@ function Travels() {
                     className={style.customColumn}
                     field="status"
                     header="Status"
+                    body={renderStatusCell}
                   ></Column>
                   <Column
                     className={style.customColumn}
                     field="approveByAccountant"
                     header="Approve/Reject By Accountant"
+                    body={(rowData) =>
+                      findUserByName(rowData.approveByAccountant)
+                    }
                   ></Column>
                   <Column
                     className={style.customColumn}

@@ -9,7 +9,6 @@ function Form() {
   const history = useHistory();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-
   const { updateAccessToken, updateRefreshToken } = useContext(TokenContext);
   const { updateLoginErrorMessage, updateShowLoginPopup } =
     useContext(PopupContext);

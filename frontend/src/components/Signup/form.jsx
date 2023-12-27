@@ -10,13 +10,10 @@ function Form() {
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [email, setEmail] = useState("");
-  // const [role, setRole] = useState("accountant");
   const role = "accountant";
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
-
   const history = useHistory();
-
   const { updateAccessToken, updateRefreshToken } = useContext(TokenContext);
   const { updateSignupErrorMessage, updateShowSignupPopup } =
     useContext(PopupContext);

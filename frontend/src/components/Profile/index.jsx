@@ -7,18 +7,12 @@ import style from "./styles.module.css";
 
 function Profile() {
   const { accessToken, refreshToken } = useContext(TokenContext);
-
   const apiUrl = "http://localhost:4000";
-
-  console.log(accessToken);
-  console.log(refreshToken);
 
   const { data, isLoading } = useSWR(`${apiUrl}/auth/me`, async (url) => {
     const response = await profileApi(accessToken, refreshToken, "POST");
     return response;
   });
-
-  console.log("data: ", data);
 
   return (
     <Fragment>

@@ -6,8 +6,11 @@ const Popup = ({ message, onClose }) => {
   return createPortal(
     <div className={style.popupOverlay}>
       <div className={style.popupCard}>
-        {/* <p>{message}</p> */}
-        <img src={message} alt="image" style={{ width: "100%", marginBottom: "1rem" }} />
+        <img
+          src={message}
+          alt="image"
+          style={{ width: "100%", marginBottom: "1rem" }}
+        />
         <button className={style.button} onClick={onClose}>
           Close
         </button>

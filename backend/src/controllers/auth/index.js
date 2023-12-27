@@ -147,13 +147,36 @@ const Me = async (req, res, next) => {
     throw Boom.badRequest();
   }
 
-  	const user = await User.findById(user_id).select("-password -__v");
+  const user = await User.findById(user_id).select("-password -__v");
 
-	res.json(user);
+  res.json(user);
   } catch (e) {
 	next(e);
   }
 };
+
+const Users = async (req, res, next) => {
+	// const { user_id: id } = req.payload;
+	try {
+	const { refresh_token } = req.body;
+	if (!refresh_token) {
+	  throw Boom.badRequest();
+	}
+  
+	const user_id = await verifyRefreshToken(refresh_token);
+	const data = await redis.get(user_id);
+  
+	if (!data) {
+	  throw Boom.badRequest();
+	}
+  
+	const user = await User.find({}).select("-password -__v");
+  
+	res.json(user);
+	} catch (e) {
+	  next(e);
+	}
+  };
 
 export default {
   Register,
@@ -161,4 +184,5 @@ export default {
   RefreshToken,
   Logout,
   Me,
+  Users
 };
