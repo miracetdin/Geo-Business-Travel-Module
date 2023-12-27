@@ -4,6 +4,7 @@ import Form from "./form";
 import style from "./styles.module.css";
 import PopupContext from "../../contexts/popupContext";
 import Popup from "./popup";
+import { Link } from "react-router-dom";
 
 function Signup() {
   const {
@@ -29,12 +30,14 @@ function Signup() {
                   <Form />
                   <br />
                   <div className="login">
-                    <button
-                      className={style.button}
-                      style={{ backgroundColor: "#F4D03F" }}
-                    >
-                      Login
-                    </button>
+                    <Link to="/login">
+                      <button
+                        className={style.button}
+                        style={{ backgroundColor: "#F4D03F" }}
+                      >
+                        Login
+                      </button>
+                    </Link>
                   </div>
                 </div>
               </div>

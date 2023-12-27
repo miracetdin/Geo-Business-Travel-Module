@@ -68,7 +68,7 @@
   box-shadow: rgba(60, 64, 67, .3) 0 1px 3px 0, rgba(60, 64, 67, .15) 0 4px 8px 3px;
 }
 .customDatatable {
-  width: 100%;
+  width: 190vh;
   border-collapse: collapse;
   margin-top: 20px;
 }
@@ -80,8 +80,10 @@
 }
 
 .customDetailsColumn,
-.customApproveColumn {
-  width: 100px; /* Özel genişlik ayarı */
+.customApproveColumn,
+.customRejectColumn {
+  /* width: 100px; Özel genişlik ayarı */
+  max-width: 100px;
   text-align: center;
   padding: 12px;
   border: 1px solid #ddd;

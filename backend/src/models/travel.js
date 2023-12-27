@@ -14,8 +14,8 @@ const TravelSchema = new Schema({
     unique: true
   },
   travelDate: {
-    type: Date,
-    default: Date.now
+    type: String,
+    default: Date.now.toString()
   },
   startLocation: {
     type: String,
@@ -67,8 +67,8 @@ const TravelSchema = new Schema({
     default: null,
   },
   approveDate: {
-    type: Date,
-    default: Date.now
+    type: String,
+    default: Date.now.toString()
   }
 });
 

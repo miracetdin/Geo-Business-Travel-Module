@@ -9,7 +9,6 @@ import Navbar from "../Navbar/index";
 import style from "./styles.module.css";
 
 function Travels() {
-  // const page = 1;
   const [currentPage, setCurrentPage] = useState(1);
   const apiUrl = "http://localhost:4000";
   const history = useHistory();
@@ -46,6 +45,7 @@ function Travels() {
     return (
       <button
         className={style.button}
+        style={{ color: "green" }}
         onClick={() => handleApproveClick(rowData)}
       >
         Approve
@@ -53,9 +53,52 @@ function Travels() {
     );
   };
 
+  const renderRejectButton = (rowData) => {
+    return (
+      <button
+        className={style.button}
+        style={{ color: "red" }}
+        onClick={() => handleRejectClick(rowData)}
+      >
+        Reject
+      </button>
+    );
+  };
+
   const handleApproveClick = async (rowData) => {
-    await travelApproveApi(accessToken, rowData._id);
-    mutate(`${apiUrl}/travel${currentPage}`);
+    const aprovalStatus = "approved";
+    const currentDate = new Date();
+    const day = String(currentDate.getDate()).padStart(2, "0");
+    const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+    const year = currentDate.getFullYear();
+    const date = `${day}.${month}.${year}`;
+    const accountant = "tayyip";
+    await travelApproveApi(
+      accessToken,
+      rowData._id,
+      aprovalStatus,
+      date,
+      accountant
+    );
+    await mutate(`${apiUrl}/travel${currentPage}`);
+  };
+
+  const handleRejectClick = async (rowData) => {
+    const aprovalStatus = "reject";
+    const currentDate = new Date();
+    const day = String(currentDate.getDate()).padStart(2, "0");
+    const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+    const year = currentDate.getFullYear();
+    const date = `${day}.${month}.${year}`;
+    const accountant = "tayyip";
+    await travelApproveApi(
+      accessToken,
+      rowData._id,
+      aprovalStatus,
+      date,
+      accountant
+    );
+    await mutate(`${apiUrl}/travel${currentPage}`);
   };
 
   let counter = -1;
@@ -72,13 +115,6 @@ function Travels() {
     return <span style={cellStyle}>{rowData.suspicious}</span>;
   };
 
-  const renderDateCell = (rowData) => {
-    const rawDate = new Date(rowData.travelDate);
-    const formattedDate = rawDate.toLocaleDateString();
-
-    return <span>{formattedDate}</span>;
-  };
-
   return (
     <Fragment>
       <Navbar />
@@ -91,12 +127,13 @@ function Travels() {
                 <DataTable
                   className={style.customDatatable}
                   value={data}
-                  tableStyle={{ minWidth: "50rem" }}
+                  tableStyle={{ minWidth: "50rem", maxWidth: "100%" }}
                   rowClassName={rowClassName}
-                  onPage={onPageChange} // Add this line for pagination
-                  paginator={true} // Enable paginator
-                  rows={10} // Number of rows per page
-                  totalRecords={data ? data.length : 0} // Total number of records (for paginator)
+                  onPage={onPageChange}
+                  paginator={true}
+                  rows={10}
+                  totalRecords={data ? data.length : 0}
+                  scrollable={""}
                 >
                   <Column
                     className={style.customColumn}
@@ -107,7 +144,6 @@ function Travels() {
                     className={style.customColumn}
                     field="travelDate"
                     header="Travel Date"
-                    body={renderDateCell}
                   ></Column>
                   <Column
                     className={style.customColumn}
@@ -146,13 +182,12 @@ function Travels() {
                   <Column
                     className={style.customColumn}
                     field="approveByAccountant"
-                    header="Approve By Accountant"
+                    header="Approve/Reject By Accountant"
                   ></Column>
                   <Column
                     className={style.customColumn}
                     field="approveDate"
-                    header="Approve Date"
-                    body={renderDateCell}
+                    header="Approve/Reject Date"
                   ></Column>
                   <Column
                     className={style.customDetailsColumn}
@@ -163,6 +198,11 @@ function Travels() {
                     className={style.customApproveColumn}
                     header="Approve"
                     body={renderApproveButton}
+                  ></Column>
+                  <Column
+                    className={style.customRejectColumn}
+                    header="Reject"
+                    body={renderRejectButton}
                   ></Column>
                 </DataTable>
               )}

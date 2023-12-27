@@ -94,14 +94,15 @@ const travelDetailsApi = async (access_token, travelId) => {
   }
 };
 
-const travelApproveApi = async (access_token, travelId) => {
+const travelApproveApi = async (access_token, travelId, aprovalStatus, date, accountant) => {
   try {
 
-    const dateString = "24.12.2023";
+    // const dateString = "24.12.2023";
+    const dateString = date;
     const dateArray = dateString.split("."); // String'i noktalara göre ayır
     const formattedDateString = `${dateArray[1]}/${dateArray[0]}/${dateArray[2]}`; // Tarihi MM/DD/YYYY formatına çevir
+    console.log("formattedDateString: ", formattedDateString);
 
-    const dateObject = new Date(formattedDateString);
     const response = await fetch(`${apiUrl}/travel/${travelId}`, {
       method: "PUT",
       headers: {
@@ -109,9 +110,9 @@ const travelApproveApi = async (access_token, travelId) => {
         Authorization: `${access_token}`
       },
       body: JSON.stringify({
-        status: "approved",
-        approveByAccountant: "tayyip",
-        approveDate: dateObject
+        status: aprovalStatus,
+        approveByAccountant: accountant,
+        approveDate: formattedDateString
       })
     })
 

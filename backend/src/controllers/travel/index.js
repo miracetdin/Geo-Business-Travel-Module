@@ -66,6 +66,8 @@ const Get = async (req, res, next) => {
 const Update = async (req, res, next) => {
   const { travel_id } = req.params;
 
+  console.log(req.body);
+
   try {
   	const updated = await Travel.findByIdAndUpdate(travel_id, req.body, {
   		new: true,

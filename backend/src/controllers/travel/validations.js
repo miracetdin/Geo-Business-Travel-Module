@@ -3,7 +3,7 @@ import Joi from 'joi';
 const TravelSchema = Joi.object({
   // travelId: Joi.number().required(),
   employeeUsername: Joi.string().min(5),
-  travelDate: Joi.date().required(),
+  travelDate: Joi.string().required(),
   startLocation: Joi.string().required(),
   endLocation: Joi.string().required(),
   invoicePhoto: Joi.string().required(),
