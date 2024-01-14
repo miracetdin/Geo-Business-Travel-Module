@@ -7,6 +7,11 @@ exports.roles = (function () {
   ac.grant('admin').extend('user').deleteAny('user');
   ac.grant('admin').extend('user').deleteAny('travel');
   ac.grant('accountant').extend('user').updateAny('travel');
+  ac.grant('accountant').extend('user').updateAny('fee');
+  ac.grant('accountant').extend('user').readAny('fee');
+  ac.grant('accountant').extend('user').createAny('fee');
+  ac.grant('accountant').extend('user').deleteAny('fee');
+  ac.grant('accountant').extend('user').updateAny('fee');
   ac.grant('employee').extend('user').createAny('travel');
 
   return ac;
