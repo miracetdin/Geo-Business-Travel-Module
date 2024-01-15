@@ -279,6 +279,28 @@ const deleteCityApi = async (access_token, city) => {
   }
 };
 
+const getCityApi = async (access_token, city) => {
+  try {
+    const response = await fetch(`${apiUrl}/fee/${city}`, {
+      method: "GET",
+      headers: {
+        // "Content-Type": "application/json",
+        Authorization: `${access_token}`
+      }
+    })
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error:", error);
+    return { error: "Request failed!" };
+  }
+};
+
 export { 
   loginApi, 
   profileApi,
