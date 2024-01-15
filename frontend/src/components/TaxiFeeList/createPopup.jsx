@@ -65,7 +65,7 @@ const CreatePopup = ({ onClose }) => {
             />
           </div>
           <br />
-          <div className="Update">
+          <div className="Update mb-3">
             <button type="submit" className={style.button}>
               Create
             </button>

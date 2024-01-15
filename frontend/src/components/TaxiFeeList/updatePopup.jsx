@@ -51,7 +51,7 @@ const UpdatePopup = ({ onClose, rowData, accessToken }) => {
             />
           </div>
           <br />
-          <div className="Update">
+          <div className="Update mb-3">
             <button type="submit" className={style.button}>
               Update
             </button>
