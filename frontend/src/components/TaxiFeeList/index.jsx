@@ -1,0 +1,165 @@
+import React, { Fragment, useContext, useState } from "react";
+import { DataTable } from "primereact/datatable";
+import { Column } from "primereact/column";
+import {
+    createCityApi,
+    getCityListApi,
+    updateCityApi,
+    deleteCityApi,
+  } from "../api/apiFunctions";
+import useSWR, { mutate } from "swr";
+import TokenContext from "../../contexts/tokenContext";
+import Navbar from "../Navbar/index";
+import style from "./styles.module.css";
+import UpdatePopup from "./updatePopup";
+
+function TaxiFeeList() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const apiUrl = "http://localhost:4000";
+  const { accessToken, refreshToken } = useContext(TokenContext);
+  const [newOpeningFee, setNewOpeningFee] = useState(0);
+  const [newFeePerKm, setNewFeePerKm] = useState(0);
+  const [showUpdatePopup, setShowUpdatePopup] = useState(false);
+  const [updateCity, setUpdateCity] = useState("");
+
+  const { data, isLoading } = useSWR(
+    `${apiUrl}/fee${currentPage}`,
+    async (url) => {
+      const response = await getCityListApi(accessToken, currentPage, "GET");
+      return response;
+    }
+  );
+
+  const onPageChange = (event) => {
+    setCurrentPage(event.first / event.rows + 1);
+  };
+
+  const renderCreateButton = (rowData) => {
+    return (
+      <button
+        className={style.button}
+        style={{ color: "green" }}
+        onClick={() => handleCreate(rowData)}
+      >
+        Update
+      </button>
+    );
+  };
+
+  const handleCreate = async (rowData) => {
+    await createCityApi(
+      rowData.city,
+      newOpeningFee,
+      newFeePerKm,
+    );
+    await mutate(`${apiUrl}/fee${rowData.city}`);
+  };
+
+  const renderUpdateButton = (rowData) => {
+    return (
+      <button
+        className={style.button}
+        style={{ color: "green" }}
+        onClick={() => handleUpdate(rowData)}
+      >
+        Update
+      </button>
+    );
+  };
+
+  const handleUpdate = async (rowData) => {
+    setUpdateCity(rowData);
+    setShowUpdatePopup(true);
+    await mutate(`${apiUrl}/fee${rowData.city}`);
+  };
+
+  const closePopup = () => {
+    setShowUpdatePopup(false);
+  };
+
+  const renderDeleteButton = (rowData) => {
+    return (
+      <button
+        className={style.button}
+        style={{ color: "green" }}
+        onClick={() => handleDelete(rowData)}
+      >
+        Delete
+      </button>
+    );
+  };
+
+  const handleDelete = async (rowData) => {
+    await deleteCityApi(
+      accessToken,
+      rowData.city,
+    );
+    await mutate(`${apiUrl}/fee${rowData.city}`);
+  };
+
+  return (
+    <Fragment>
+      <Navbar />
+      <div className="container mt-3 mb-3">
+        <div className="row d-flex justify-content-between">
+          <div className="login-card d-flex flex-column align-items-center">
+            <div className="card">
+              <h2 className="pt-3">Taxi Fee List</h2>
+              {/* {!isLoading && !userListIsLoading && !accountantIsLoading && ( */}
+              {(
+                <DataTable
+                  className={style.customDatatable}
+                  value={data}
+                  tableStyle={{ minWidth: "50rem", maxWidth: "100%" }}
+                //   rowClassName={rowClassName}
+                  onPage={onPageChange}
+                  paginator={true}
+                  rows={10}
+                  totalRecords={data ? data.length : 0}
+                  scrollable={""}
+                >
+                  <Column
+                    className={style.customColumn}
+                    field="city"
+                    header="City"
+                  ></Column>
+                  <Column
+                    className={style.customColumn}
+                    field="openingFee"
+                    header="Opening Fee"
+                  ></Column>
+                  <Column
+                    className={style.customColumn}
+                    field="feePerKm"
+                    header="Fee/Km"
+                  ></Column>
+                  <Column
+                    className={style.customDetailsColumn}
+                    header="Update"
+                    body={renderUpdateButton}
+                  ></Column>
+                  <Column
+                    className={style.customApproveColumn}
+                    header="Delete"
+                    body={renderDeleteButton}
+                  ></Column>
+                </DataTable>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="popup-update"></div>
+      {showUpdatePopup && (
+        <UpdatePopup
+          onClose={closePopup}
+          rowData={updateCity}
+          accessToken={accessToken}
+          style={style.popupStyle}
+        />
+      )}
+    </Fragment>
+  )
+};
+
+export default TaxiFeeList;

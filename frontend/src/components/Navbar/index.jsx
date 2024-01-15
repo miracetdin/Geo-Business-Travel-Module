@@ -31,6 +31,9 @@ function Navbar() {
                 <li>
                   <Link to="/travel">Travel</Link>
                 </li>
+                <li>
+                  <Link to="/fee">Taxi Fee</Link>
+                </li>
               </ul>
             </div>
             <div className="col-6">

@@ -38,7 +38,7 @@ const Update = async (req, res, next) => {
   console.log(req.body);
 
   try {
-    const updated = await Fee.findOneAndUpdate(city, req.body, {
+    const updated = await Fee.findOneAndUpdate({city: city}, req.body, {
         new: true,
     });
 

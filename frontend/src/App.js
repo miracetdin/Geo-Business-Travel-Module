@@ -13,6 +13,7 @@ import { useEffect, useState } from 'react';
 import { TokenProvider } from './contexts/tokenContext';
 import TravelDetails from './components/TravelDetails';
 import { PopupProvider } from './contexts/popupContext';
+import TaxiFeeList from './components/TaxiFeeList';
 
 function App() {
   const [currentPath, setCurrentPath] = useState("/");
@@ -71,6 +72,9 @@ function App() {
                 </Route>
                 <Route path="/travel-details/:id">
                   <TravelDetails />
+                </Route>
+                <Route path="/fee">
+                  <TaxiFeeList />
                 </Route>
               </Switch>
             </div>
