@@ -12,6 +12,8 @@ import TokenContext from "../../contexts/tokenContext";
 import Navbar from "../Navbar/index";
 import style from "./styles.module.css";
 import UpdatePopup from "./updatePopup";
+import CreatePopup from "./createPopup";
+import { Button } from "bootstrap";
 
 function TaxiFeeList() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -20,6 +22,7 @@ function TaxiFeeList() {
   const [newOpeningFee, setNewOpeningFee] = useState(0);
   const [newFeePerKm, setNewFeePerKm] = useState(0);
   const [showUpdatePopup, setShowUpdatePopup] = useState(false);
+  const [showCreatePopup, setShowCreatePopup] = useState(false);
   const [updateCity, setUpdateCity] = useState("");
 
   const { data, isLoading } = useSWR(
@@ -34,25 +37,9 @@ function TaxiFeeList() {
     setCurrentPage(event.first / event.rows + 1);
   };
 
-  const renderCreateButton = (rowData) => {
-    return (
-      <button
-        className={style.button}
-        style={{ color: "green" }}
-        onClick={() => handleCreate(rowData)}
-      >
-        Update
-      </button>
-    );
-  };
-
-  const handleCreate = async (rowData) => {
-    await createCityApi(
-      rowData.city,
-      newOpeningFee,
-      newFeePerKm,
-    );
-    await mutate(`${apiUrl}/fee${rowData.city}`);
+  const handleCreate = async () => {
+    setShowCreatePopup(true);
+    await mutate(`${apiUrl}/fee`);
   };
 
   const renderUpdateButton = (rowData) => {
@@ -75,13 +62,14 @@ function TaxiFeeList() {
 
   const closePopup = () => {
     setShowUpdatePopup(false);
+    setShowCreatePopup(false);
   };
 
   const renderDeleteButton = (rowData) => {
     return (
       <button
         className={style.button}
-        style={{ color: "green" }}
+        style={{ color: "red" }}
         onClick={() => handleDelete(rowData)}
       >
         Delete
@@ -103,6 +91,15 @@ function TaxiFeeList() {
       <div className="container mt-3 mb-3">
         <div className="row d-flex justify-content-between">
           <div className="login-card d-flex flex-column align-items-center">
+            <div className="pb-3">
+              <button
+                className={style.button}
+                style={{ color: "green", marginLeft: "250%" }}
+                onClick={() => handleCreate()}
+              >
+              Create
+              </button>
+            </div>
             <div className="card">
               <h2 className="pt-3">Taxi Fee List</h2>
               {/* {!isLoading && !userListIsLoading && !accountantIsLoading && ( */}
@@ -155,6 +152,13 @@ function TaxiFeeList() {
           onClose={closePopup}
           rowData={updateCity}
           accessToken={accessToken}
+          style={style.popupStyle}
+        />
+      )}
+      <div id="popup-create"></div>
+      {showCreatePopup && (
+        <CreatePopup
+          onClose={closePopup}
           style={style.popupStyle}
         />
       )}

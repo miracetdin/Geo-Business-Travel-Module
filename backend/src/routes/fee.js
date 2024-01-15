@@ -8,8 +8,6 @@ import { verifyAccessToken } from "../helpers/jwt";
 
 router.post(
     "/",
-    verifyAccessToken,
-    grantAccess("createAny", "fee"),
     Fee.Create
 );
 router.get(
