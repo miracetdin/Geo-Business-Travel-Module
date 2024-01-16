@@ -9,7 +9,7 @@ const Popup = ({ message, onClose }) => {
         <img
           src={message}
           alt="image"
-          style={{ width: "100%", marginBottom: "1rem" }}
+          style={{ maxWidth: "25rem", maxHeight: "25rem", marginBottom: "1rem" }}
         />
         <button className={style.button} onClick={onClose}>
           Close

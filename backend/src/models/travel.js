@@ -67,7 +67,7 @@ const TravelSchema = new Schema({
   },
   approveDate: {
     type: String,
-    default: Date.now.toString()
+    // default: Date.now.toString()
   }
 });
 

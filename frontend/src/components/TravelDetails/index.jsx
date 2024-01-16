@@ -69,8 +69,9 @@ function TravelDetails() {
     return (
       <img
         src={rowData.invoicePhoto}
+        //src={`http://192.168.1.54:4000/upload/1705415706102.jpg`}
         alt="Invoice"
-        style={{ width: "100px", cursor: "pointer" }}
+        style={{ maxWidth: "100px", cursor: "pointer" }}
         onClick={handleImageClick}
       />
     );
@@ -127,7 +128,7 @@ function TravelDetails() {
                   <Column
                     className={style.customColumn}
                     field="invoiceInfo"
-                    header="Invoice Info"
+                    header="Travel Distance"
                   ></Column>
                   <Column
                     className={style.customColumn}
