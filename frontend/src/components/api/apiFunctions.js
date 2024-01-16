@@ -301,6 +301,127 @@ const getCityApi = async (access_token, city) => {
   }
 };
 
+// Plan APIs
+const createPlanApi = async (access_token, planData) => {
+  try {
+    const response = await fetch(`${apiUrl}/plan`, {
+      method: "POST",
+      // headers: {
+      //   "Content-Type": "application/json",
+      //   "Authorization": `Bearer ${accessToken}`,
+      // },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${access_token}`
+      },
+      body: JSON.stringify(planData),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error:", error);
+    return { error: "Request failed!" };
+  }
+};
+
+const getPlanApi = async (access_token, planId) => {
+  try {
+    const response = await fetch(`${apiUrl}/plan/${planId}`, {
+      method: "GET",
+      headers: {
+        //"Authorization": `Bearer ${accessToken}`,
+        Authorization: `${access_token}`
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error:", error);
+    return { error: "Request failed!" };
+  }
+};
+
+const getPlansListApi = async (access_token, page) => {
+  try {
+    const response = await fetch(`${apiUrl}/plan/?page=${page}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${access_token}`
+      }
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error:", error);
+    return { error: "Request failed!" };
+  }
+};
+
+const updatePlanApi = async (access_token, planId, updatedPlanData) => {
+  try {
+    const response = await fetch(`${apiUrl}/plan/${planId}`, {
+      method: "PUT",
+      // headers: {
+      //   "Content-Type": "application/json",
+      //   "Authorization": `Bearer ${accessToken}`,
+      // },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${access_token}`
+      },
+      body: JSON.stringify(updatedPlanData),
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error:", error);
+    return { error: "Request failed!" };
+  }
+};
+
+const deletePlanApi = async (access_token, planId) => {
+  try {
+    const response = await fetch(`${apiUrl}/plan/${planId}`, {
+      method: "DELETE",
+      headers: {
+        //"Authorization": `Bearer ${accessToken}`,
+        Authorization: `${access_token}`
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error:", error);
+    return { error: "Request failed!" };
+  }
+};
+
 export { 
   loginApi, 
   profileApi,
@@ -312,5 +433,10 @@ export {
   createCityApi,
   getCityListApi,
   updateCityApi,
-  deleteCityApi 
+  deleteCityApi,
+  createPlanApi,
+  getPlanApi,
+  getPlansListApi,
+  updatePlanApi,
+  deletePlanApi
 };

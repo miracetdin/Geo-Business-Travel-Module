@@ -14,6 +14,7 @@ import { TokenProvider } from './contexts/tokenContext';
 import TravelDetails from './components/TravelDetails';
 import { PopupProvider } from './contexts/popupContext';
 import TaxiFeeList from './components/TaxiFeeList';
+import PlanList from './components/PlanList';
 
 function App() {
   const [currentPath, setCurrentPath] = useState("/");
@@ -75,6 +76,9 @@ function App() {
                 </Route>
                 <Route path="/fee">
                   <TaxiFeeList />
+                </Route>
+                <Route path="/plan">
+                  <PlanList />
                 </Route>
               </Switch>
             </div>
