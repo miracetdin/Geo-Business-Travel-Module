@@ -11,7 +11,6 @@ const TravelSchema = new Schema({
   employeeUsername: {
     type: String,
     required: true,
-    unique: true
   },
   travelDate: {
     type: String,
