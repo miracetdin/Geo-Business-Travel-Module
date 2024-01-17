@@ -16,6 +16,16 @@ const PlanSchema = new Schema({
     type: String,
     required: true
   },
+  coordinates: {
+    type: Object,
+    required: true,
+    lat: {
+      type: String
+    },
+    long: {
+      type: String
+    }
+  },
   accountantUsername: {
     type: String,
     required: true,

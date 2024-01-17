@@ -17,6 +17,7 @@ const CreatePopup = ({ accessToken, onClose, meData, employeeList, cityList }) =
   const [employeeUsername, setEmployeeUsername] = useState("");
   const [travelDate, setTravelDate] = useState("");
   const [endLocation, setEndLocation] = useState("");
+  const [endCoordinates, setEndCoordinates] = useState("");
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [tempDate, setTempDate] = useState("");
   const [mapPosition, setMapPosition] = useState({ lat: 0, lng: 0 });
@@ -31,6 +32,7 @@ const CreatePopup = ({ accessToken, onClose, meData, employeeList, cityList }) =
       employeeUsername: employeeUsername,
       travelDate: travelDate,
       endLocation: endLocation,
+      coordinates: endCoordinates,
       accountantUsername: meData.username
     };
 
@@ -64,15 +66,17 @@ const CreatePopup = ({ accessToken, onClose, meData, employeeList, cityList }) =
   
       if (data.results.length > 0) {
         // Geocoding API'den dönen ilk sonucun tam adresini ve koordinatlarını al
-        const location = data.results[0].geometry.location;
+        const locationCoordinates = data.results[0].geometry.location;
         const fullAddress = data.results[0].formatted_address;
   
         // SetMapPosition ile harita üzerinde seçilen konumu güncelle
-        setMapPosition(location);
+        setMapPosition(locationCoordinates);
   
         // Harita üzerinde seçilen konumu ve tam adresi endLocation ve console.log ile göster
-        setEndLocation({ ...location, address: fullAddress });
+        setEndLocation(fullAddress);
         console.log("endLocation: ", endLocation);
+        setEndCoordinates(locationCoordinates);
+        console.log("endCoordinates: ", endCoordinates);
       } else {
         console.error('Geocode API returned no results.');
       }
