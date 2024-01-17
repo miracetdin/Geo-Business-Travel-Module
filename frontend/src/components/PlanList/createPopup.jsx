@@ -1,15 +1,16 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { createPortal } from "react-dom";
 import Select from 'react-select';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { GoogleMap, Marker, LoadScript } from "@react-google-maps/api";
 import style from "./styles.module.css";
 import {
     createPlanApi,
   } from "../api/apiFunctions";
 import TokenContext from "../../contexts/tokenContext";
 
-const CreatePopup = ({ accessToken, onClose, meData, employeeList }) => {
+const CreatePopup = ({ accessToken, onClose, meData, employeeList, cityList }) => {
   const apiUrl = "http://localhost:4000";
   const { accessToken2, refreshToken } = useContext(TokenContext);
 
@@ -18,6 +19,8 @@ const CreatePopup = ({ accessToken, onClose, meData, employeeList }) => {
   const [endLocation, setEndLocation] = useState("");
   const [selectedEmployee, setSelectedEmployee] = useState(null);
   const [tempDate, setTempDate] = useState("");
+  const [mapPosition, setMapPosition] = useState({ lat: 0, lng: 0 });
+  const [selectedCity, setSelectedCity] = useState(null);
 
   let formattedDate = null;
   
@@ -43,6 +46,103 @@ const CreatePopup = ({ accessToken, onClose, meData, employeeList }) => {
       value: employee.username,
       label: `${employee.name} ${employee.surname} (${employee.email})`,
     }));
+
+  const handleMapClick = async (event) => {
+    // Harita üzerinde tıklanan konumu al
+    const clickedLocation = {
+      lat: event.latLng.lat(),
+      lng: event.latLng.lng(),
+    };
+    
+    try {
+      // Google Geocoding API'ye tıklanan konumu sorgula
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${clickedLocation.lat},${clickedLocation.lng}&key=AIzaSyDiA-6dALFcffd3sVMwzPCue0IFk4tB0uw`
+      );
+  
+      const data = await response.json();
+  
+      if (data.results.length > 0) {
+        // Geocoding API'den dönen ilk sonucun tam adresini ve koordinatlarını al
+        const location = data.results[0].geometry.location;
+        const fullAddress = data.results[0].formatted_address;
+  
+        // SetMapPosition ile harita üzerinde seçilen konumu güncelle
+        setMapPosition(location);
+  
+        // Harita üzerinde seçilen konumu ve tam adresi endLocation ve console.log ile göster
+        setEndLocation({ ...location, address: fullAddress });
+        console.log("endLocation: ", endLocation);
+      } else {
+        console.error('Geocode API returned no results.');
+      }
+    } catch (error) {
+      console.error('Error fetching geocode data:', error);
+    }
+  };
+
+
+  const cityOptions = cityList.map((city) => ({
+    value: city.city,
+    label: city.city,
+  }));
+  
+
+  useEffect(() => {
+    // Update the map position when the selectedCity changes
+    if (selectedCity) {
+      // Use an API to get the coordinates for the selected city or adjust as needed
+      // For the sake of the example, let's assume that you have a function getCoordinatesForCity
+      const updateMapPosition = async () => {
+        try {
+          const locationInfo = await getCoordinatesForCity(selectedCity);
+          console.log("Fetched coordinates:", locationInfo);
+      
+          // Instead of directly setting mapPosition, call setMapPosition here
+          setMapPosition(prevPosition => {
+            console.log("Setting map position:", locationInfo);
+            return locationInfo;
+          });
+      
+        } catch (error) {
+          console.error('Error fetching coordinates:', error);
+        }
+      };
+      
+  
+      updateMapPosition();
+    }
+  }, [selectedCity]);
+  
+
+
+
+  const getCoordinatesForCity = async (city) => {
+    try {
+      const response = await fetch(
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${city}&key=AIzaSyDiA-6dALFcffd3sVMwzPCue0IFk4tB0uw`
+      );
+  
+      const data = await response.json();
+  
+      if (data.results.length > 0) {
+        const location = data.results[0].geometry.location;
+        const fullAddress = data.results[0].formatted_address;
+  
+        console.log("harita: ", location);
+        console.log("Tam Adres: ", fullAddress);
+  
+        return { lat: location.lat, lng: location.lng, address: fullAddress };
+      } else {
+        console.error('Geocode API returned no results.');
+        return { lat: 0, lng: 0, address: '' };
+      }
+    } catch (error) {
+      console.error('Error fetching coordinates:', error);
+      return { lat: 0, lng: 0, address: '' }; // Default to 0,0 if an error occurs
+    }
+  };
+  
 
   return createPortal(
     <div className={style.popupOverlay}>
@@ -99,7 +199,60 @@ const CreatePopup = ({ accessToken, onClose, meData, employeeList }) => {
           </div>
           <div className="endLocation mt-2">
             Destination
-            <input
+            {selectedCity ? (
+              <LoadScript
+                googleMapsApiKey="AIzaSyDiA-6dALFcffd3sVMwzPCue0IFk4tB0uw"
+                libraries={['places']}
+              >
+                <GoogleMap
+                  mapContainerStyle={{
+                    height: "300px",
+                    width: "100%",
+                  }}
+                  center={mapPosition}
+                  zoom={15}
+                  onClick={handleMapClick}
+                >
+                  <Marker position={mapPosition} />
+                </GoogleMap>
+              </LoadScript>
+            ) : (
+              <Select
+                className="form-control"
+                id="citySelect"
+                name="citySelect"
+                value={selectedCity}
+                onChange={(selectedOption) => {
+                  setSelectedCity(selectedOption ? selectedOption.value : null);
+                  setMapPosition({
+                    lat: 0,
+                    lng: 0,
+                  });
+                }}
+                options={[
+                  { value: null, label: "Select City", isDisabled: true },
+                  ...cityOptions,
+                ]}
+                isSearchable
+              />
+            )}
+            {/* <LoadScript
+              googleMapsApiKey="AIzaSyDiA-6dALFcffd3sVMwzPCue0IFk4tB0uw"
+              libraries={['places']}
+            >
+              <GoogleMap
+                mapContainerStyle={{
+                  height: "300px",
+                  width: "100%",
+                }}
+                center={mapPosition}
+                zoom={15}
+                onClick={handleMapClick}
+              >
+                <Marker position={mapPosition} />
+              </GoogleMap>
+            </LoadScript> */}
+            {/* <input
               className="form-control"
               aria-label="Large"
               aria-describedby="inputGroup-sizing-sm  type="
@@ -108,7 +261,7 @@ const CreatePopup = ({ accessToken, onClose, meData, employeeList }) => {
               placeholder="Destination"
               value={endLocation}
               onChange={(e) => setEndLocation(e.target.value)}
-            />
+            /> */}
           </div>
           <br />
           <div className="Update mb-3">

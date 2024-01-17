@@ -7,7 +7,8 @@ import {
     updatePlanApi,
     deletePlanApi,
     profileApi,
-    usersApi
+    usersApi,
+    citiesApi
   } from "../api/apiFunctions";
 import useSWR, { mutate } from "swr";
 import TokenContext from "../../contexts/tokenContext";
@@ -47,6 +48,16 @@ function TaxiFeeList() {
       return response;
     }
   );
+
+  const { data: cities, isLoading: citiesIsLoading } = useSWR(
+    `${apiUrl}/fee/cities`,
+    async (url) => {
+      const response = await citiesApi(accessToken, refreshToken, "POST");
+      return response;
+    }
+  );
+
+  console.log("cities:", cities)
 
   const onPageChange = (event) => {
     setCurrentPage(event.first / event.rows + 1);
@@ -167,7 +178,7 @@ function TaxiFeeList() {
         </div>
       </div>
       <div id="popup-update"></div>
-      {showUpdatePopup && !meIsLoading && !userListIsLoading && (
+      {showUpdatePopup && !meIsLoading && !userListIsLoading && !citiesIsLoading && (
         <UpdatePopup
           onClose={closePopup}
           rowData={rowData}
@@ -177,11 +188,12 @@ function TaxiFeeList() {
         />
       )}
       <div id="popup-create"></div>
-      {showCreatePopup && !meIsLoading && !userListIsLoading && (
+      {showCreatePopup && !meIsLoading && !userListIsLoading && !citiesIsLoading && (
         <CreatePopup
           accessToken={accessToken}
           meData={meData}
           employeeList={employeeList}
+          cityList={cities}
           onClose={closePopup}
           style={style.popupStyle}
         />

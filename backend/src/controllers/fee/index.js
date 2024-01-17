@@ -2,6 +2,14 @@ import Fee from "../../models/fee";
 import FeeSchema from "./validations";
 import Boom from "boom";
 
+// helpers
+import {
+  signAccessToken,
+  signRefreshToken,
+  verifyRefreshToken,
+} from "../../helpers/jwt";
+import redis from "../../clients/redis";
+
 const Create = async (req, res, next) => {
   const input = req.body;
   const { error } = FeeSchema.validate(input);
@@ -90,10 +98,33 @@ const GetList = async (req, res, next) => {
   }
 };
 
+const getCities = async (req, res, next) => {
+	try {
+	const { refresh_token } = req.body;
+	if (!refresh_token) {
+	  throw Boom.badRequest();
+	}
+  
+	const user_id = await verifyRefreshToken(refresh_token);
+	const data = await redis.get(user_id);
+  
+	if (!data) {
+	  throw Boom.badRequest();
+	}
+  
+	const cityList = await Fee.find({}).select("-password -__v");
+  
+	res.json(cityList);
+	} catch (e) {
+	  next(e);
+	}
+};
+
 export default {
   Create,
   Get,
   Update,
   Delete,
   GetList,
+  getCities
 };

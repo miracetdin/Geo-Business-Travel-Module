@@ -230,6 +230,31 @@ const getCityListApi = async (access_token, page) => {
   }
 };
 
+const citiesApi = async (access_token, refresh_token) => {
+  try {
+    const response = await fetch(`${apiUrl}/fee/cities`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `${access_token}`
+      },
+      body: JSON.stringify({
+        refresh_token: `${refresh_token}`
+      })
+    })
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error:", error);
+    return { error: "Request failed!" };
+  }
+};
+
 const updateCityApi = async (access_token, city, openingFee, feePerKm) => {
   try {
 
@@ -432,11 +457,12 @@ export {
   signupApi,
   createCityApi,
   getCityListApi,
+  citiesApi,
   updateCityApi,
   deleteCityApi,
   createPlanApi,
   getPlanApi,
   getPlansListApi,
   updatePlanApi,
-  deletePlanApi
+  deletePlanApi,
 };
