@@ -27,7 +27,7 @@ const Create = async (req, res, next) => {
 	const travel = new Travel(input);
 	const savedData = await travel.save();
 
-	res.json(savedData);
+	res.json("saved");
   // } catch (e) {
 	// next(e);
   // }

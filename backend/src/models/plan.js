@@ -3,6 +3,10 @@ import mongoose, { Schema } from "mongoose";
 const Schema = mongoose.Schema;
 
 const PlanSchema = new Schema({
+  _id: {
+    type: mongoose.Types.ObjectId,
+    default: () => new mongoose.Types.ObjectId(),
+  },
   employeeUsername: {
     type: String,
     required: true,

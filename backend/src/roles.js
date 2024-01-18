@@ -17,6 +17,7 @@ exports.roles = (function () {
   ac.grant('accountant').extend('user').createAny('plan');
   ac.grant('accountant').extend('user').deleteAny('plan');
   ac.grant('employee').extend('user').createAny('travel');
+  ac.grant('employee').extend('user').deleteAny('plan');
 
   return ac;
 })();
