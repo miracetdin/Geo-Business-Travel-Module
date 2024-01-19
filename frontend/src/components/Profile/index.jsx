@@ -4,10 +4,11 @@ import { profileApi } from "../api/apiFunctions";
 import useSWR from "swr";
 import Navbar from "../Navbar/index";
 import style from "./styles.module.css";
+import { apiBaseUrl } from '../../config/apiConfig';
 
 function Profile() {
   // const { accessToken, refreshToken } = useContext(TokenContext);
-  const apiUrl = "http://localhost:4000";
+  const apiUrl = apiBaseUrl;
 
   let accessToken = sessionStorage.getItem("accessToken");
   let refreshToken = sessionStorage.getItem("refreshToken");

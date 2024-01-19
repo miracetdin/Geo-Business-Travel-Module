@@ -9,11 +9,12 @@ import Navbar from "../Navbar/index";
 import style from "./styles.module.css";
 import PopupContext from "../../contexts/popupContext";
 import Popup from "./popup";
+import { apiBaseUrl } from '../../config/apiConfig';
 
 function TravelDetails() {
   const { id } = useParams();
   const travelId = id;
-  const apiUrl = "http://localhost:4000";
+  const apiUrl = apiBaseUrl;
   // const { accessToken, refreshToken } = useContext(TokenContext);
   let accessToken = sessionStorage.getItem("accessToken");
   let refreshToken = sessionStorage.getItem("refreshToken");

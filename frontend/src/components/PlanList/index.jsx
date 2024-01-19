@@ -17,10 +17,11 @@ import style from "./styles.module.css";
 import UpdatePopup from "./updatePopup";
 import CreatePopup from "./createPopup";
 import { Button } from "bootstrap";
+import { apiBaseUrl } from '../../config/apiConfig';
 
 function TaxiFeeList() {
   const [currentPage, setCurrentPage] = useState(1);
-  const apiUrl = "http://localhost:4000";
+  const apiUrl = apiBaseUrl;
   //const { accessToken, refreshToken } = useContext(TokenContext);
   let accessToken = sessionStorage.getItem("accessToken");
   let refreshToken = sessionStorage.getItem("refreshToken");

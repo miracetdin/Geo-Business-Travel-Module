@@ -9,9 +9,10 @@ import {
     updatePlanApi,
   } from "../api/apiFunctions";
   import TokenContext from "../../contexts/tokenContext";
+  import { apiBaseUrl } from '../../config/apiConfig';
 
 const UpdatePopup = ({ onClose, rowData, accessToken, meData, cityList }) => {
-  const apiUrl = "http://localhost:4000";
+  const apiUrl = apiBaseUrl;
   // const { accessToken2, refreshToken } = useContext(TokenContext);
   let accessToken2 = sessionStorage.getItem("accessToken");
   let refreshToken = sessionStorage.getItem("refreshToken");

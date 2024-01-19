@@ -13,10 +13,11 @@ import { useHistory } from "react-router-dom";
 import Navbar from "../Navbar/index";
 import style from "./styles.module.css";
 import { FilterMatchMode } from "primereact/api";
+import { apiBaseUrl } from '../../config/apiConfig';
 
 function Travels() {
   const [currentPage, setCurrentPage] = useState(1);
-  const apiUrl = "http://localhost:4000";
+  const apiUrl = apiBaseUrl;
   const history = useHistory();
   // const { accessToken, refreshToken } = useContext(TokenContext);
   let accessToken = sessionStorage.getItem("accessToken");

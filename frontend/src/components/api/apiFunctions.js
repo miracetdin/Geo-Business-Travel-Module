@@ -1,4 +1,6 @@
-const apiUrl = "http://localhost:4000";
+import { apiBaseUrl } from '../../config/apiConfig.js';
+
+const apiUrl = apiBaseUrl
 
 const loginApi = async (username, password) => {
   try {
