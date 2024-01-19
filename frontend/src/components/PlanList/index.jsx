@@ -179,7 +179,7 @@ function TaxiFeeList() {
                     className={style.customColumn}
                     field="accountantUsername"
                     header="Assigned By Accountant"
-                    body={(rowData) => findUserByName(rowData.employeeUsername)}
+                    body={(rowData) => findUserByName(rowData.accountantUsername)}
                     filter
                     filterField="accountantUsername"
                     showFilterMenu={false}
@@ -206,6 +206,7 @@ function TaxiFeeList() {
           onClose={closePopup}
           rowData={rowData}
           accessToken={accessToken}
+          cityList={cities}
           meData={meData}
           style={style.popupStyle}
         />
