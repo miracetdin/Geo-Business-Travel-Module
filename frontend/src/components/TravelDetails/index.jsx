@@ -9,12 +9,15 @@ import Navbar from "../Navbar/index";
 import style from "./styles.module.css";
 import PopupContext from "../../contexts/popupContext";
 import Popup from "./popup";
+import { apiBaseUrl } from '../../config/apiConfig';
 
 function TravelDetails() {
   const { id } = useParams();
   const travelId = id;
-  const apiUrl = "http://localhost:4000";
-  const { accessToken, refreshToken } = useContext(TokenContext);
+  const apiUrl = apiBaseUrl;
+  // const { accessToken, refreshToken } = useContext(TokenContext);
+  let accessToken = sessionStorage.getItem("accessToken");
+  let refreshToken = sessionStorage.getItem("refreshToken");
   const {
     invoicePhoto,
     updateInvoicePhoto,
@@ -32,7 +35,7 @@ function TravelDetails() {
 
   const findUserByName = (username) => {
     const user = userList.find((user) => user.username === username);
-    return user ? `${user.name} ${user.surname}` : "";
+    return user ? `${user.name} ${user.surname} (${user.email} - ${user.username})` : "";
   };
 
   const { data, isLoading } = useSWR(
@@ -128,22 +131,22 @@ function TravelDetails() {
                   <Column
                     className={style.customColumn}
                     field="invoiceInfo"
-                    header="Travel Distance"
+                    header="Travel Distance (Km)"
                   ></Column>
-                  <Column
+                  {/* <Column
                     className={style.customColumn}
                     field="invoiceNote"
                     header="Invoice Note"
-                  ></Column>
+                  ></Column> */}
                   <Column
                     className={style.customColumn}
                     field="invoicePrice"
-                    header="Invoice Price"
+                    header="Invoice Price  (TL)"
                   ></Column>
                   <Column
                     className={style.customColumn}
                     field="priceEstimate"
-                    header="Price Estimate"
+                    header="Price Estimate  (TL)"
                   ></Column>
                   <Column
                     className={style.customColumn}

@@ -12,12 +12,16 @@ import TokenContext from "../../contexts/tokenContext";
 import { useHistory } from "react-router-dom";
 import Navbar from "../Navbar/index";
 import style from "./styles.module.css";
+import { FilterMatchMode } from "primereact/api";
+import { apiBaseUrl } from '../../config/apiConfig';
 
 function Travels() {
   const [currentPage, setCurrentPage] = useState(1);
-  const apiUrl = "http://localhost:4000";
+  const apiUrl = apiBaseUrl;
   const history = useHistory();
-  const { accessToken, refreshToken } = useContext(TokenContext);
+  // const { accessToken, refreshToken } = useContext(TokenContext);
+  let accessToken = sessionStorage.getItem("accessToken");
+  let refreshToken = sessionStorage.getItem("refreshToken");
 
   const { data, isLoading } = useSWR(
     `${apiUrl}/travel${currentPage}`,
@@ -45,11 +49,16 @@ function Travels() {
 
   const findUserByName = (username) => {
     const user = userList.find((user) => user.username === username);
-    return user ? `${user.name} ${user.surname}` : "";
+    return user ? `${user.name} ${user.surname} (${user.email} - ${user.username})` : "";
   };
 
   const onPageChange = (event) => {
-    setCurrentPage(event.first / event.rows + 1);
+    //setCurrentPage(event.first / event.rows + 1);
+    setCurrentPage(currentPage+1);
+
+    // Update the API URL with the new page value
+    const newApiUrl = `${apiUrl}/travel${currentPage}`;
+    mutate(newApiUrl);
   };
 
   const renderDetailsButton = (rowData) => {
@@ -166,32 +175,48 @@ function Travels() {
                   value={data}
                   tableStyle={{ minWidth: "50rem", maxWidth: "100%" }}
                   rowClassName={rowClassName}
-                  onPage={onPageChange}
+                  onPageChange={onPageChange}
                   paginator={true}
-                  rows={10}
+                  rows={5}
                   totalRecords={data ? data.length : 0}
-                  scrollable={""}
+                  filterDisplay="row"
+                  scrollable="vertical" 
+                  scrollHeight="500px"
                 >
                   <Column
                     className={style.customColumn}
                     field="employeeUsername"
                     header="Employee"
                     body={(rowData) => findUserByName(rowData.employeeUsername)}
+                    filter
+                    filterField="employeeUsername"
+                    showFilterMenu={false}
                   ></Column>
                   <Column
                     className={style.customColumn}
                     field="travelDate"
                     header="Travel Date"
+                    filter
+                    filterField="travelDate"
+                    showFilterMenu={false}
                   ></Column>
                   <Column
                     className={style.customColumn}
                     field="startLocation"
                     header="Start Location"
+                    filter
+                    filterField="startLocation"
+                    showFilterMenu={false}
+                    filterMatchMode={FilterMatchMode.CONTAINS}
                   ></Column>
                   <Column
                     className={style.customColumn}
                     field="endLocation"
                     header="End Location"
+                    filter
+                    filterField="endLocation"
+                    showFilterMenu={false}
+                    filterMatchMode={FilterMatchMode.CONTAINS}
                   ></Column>
                   {/* <Column className={style.customColumn} field="invoicePhoto" header="Invoice Photo"></Column> */}
                   {/* <Column className={style.customColumn} field="invoiceInfo" header="Invoice Info"></Column> */}
@@ -199,38 +224,52 @@ function Travels() {
                   <Column
                     className={style.customColumn}
                     field="invoicePrice"
-                    header="Invoice Price"
+                    header="Invoice Price (TL)"
+                    sortable
                   ></Column>
                   <Column
                     className={style.customColumn}
                     field="priceEstimate"
-                    header="Price Estimate"
+                    header="Price Estimate (TL)"
+                    sortable
                   ></Column>
                   <Column
                     className={style.customColumn}
                     field="suspicious"
                     header="Suspicious"
                     body={renderSuspiciousCell}
+                    filter
+                    filterField="suspicious"
+                    showFilterMenu={false}
                   ></Column>
                   <Column
                     className={style.customColumn}
                     field="status"
                     header="Status"
                     body={renderStatusCell}
+                    filter
+                    filterField="status"
+                    showFilterMenu={false}
                   ></Column>
-                  <Column
+                  {/* <Column
                     className={style.customColumn}
                     field="approveByAccountant"
                     header="Approve/Reject By Accountant"
                     body={(rowData) =>
                       findUserByName(rowData.approveByAccountant)
                     }
+                    filter
+                    filterField="approveByAccountant"
+                    showFilterMenu={false}
                   ></Column>
                   <Column
                     className={style.customColumn}
                     field="approveDate"
                     header="Approve/Reject Date"
-                  ></Column>
+                    filter
+                    filterField="approveDate"
+                    showFilterMenu={false}
+                  ></Column> */}
                   <Column
                     className={style.customDetailsColumn}
                     header="Details"

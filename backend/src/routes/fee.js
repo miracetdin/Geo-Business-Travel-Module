@@ -22,6 +22,12 @@ router.get(
     grantAccess("readAny", "fee"),
     Fee.GetList
 );
+router.post(
+    "/cities",
+    verifyAccessToken,
+    grantAccess("readAny", "fee"),
+    Fee.getCities
+);
 router.put(
     "/:city",
     verifyAccessToken,

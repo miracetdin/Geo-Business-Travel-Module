@@ -10,6 +10,8 @@ function Navbar() {
   const { updateAccessToken, updateRefreshToken } = useContext(TokenContext);
 
   const handleLogout = () => {
+    sessionStorage.removeItem("accessToken")
+    sessionStorage.removeItem("refreshToken")
     updateAccessToken(null);
     updateRefreshToken(null);
     history.push("/login");
@@ -33,6 +35,9 @@ function Navbar() {
                 </li>
                 <li>
                   <Link to="/fee">Taxi Fee</Link>
+                </li>
+                <li>
+                  <Link to="/plan">Plan</Link>
                 </li>
               </ul>
             </div>

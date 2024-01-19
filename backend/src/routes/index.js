@@ -5,6 +5,7 @@ import auth from './auth';
 import travel from './travel';
 import fee from './fee';
 import upload from './upload';
+import plan from './plan';
 
 const router = Router();
 
@@ -16,5 +17,6 @@ router.use('/auth', auth);
 router.use('/travel', travel);
 router.use('/fee', fee);
 router.use('/upload', upload);
+router.use('/plan', plan);
 
 export default router;

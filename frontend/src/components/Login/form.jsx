@@ -20,6 +20,8 @@ function Form() {
       updateLoginErrorMessage("Username or password incorrect!");
       updateShowLoginPopup(true);
     } else if (result && result.user.role !== "employee") {
+      sessionStorage.setItem("accessToken", result.accessToken);
+      sessionStorage.setItem("refreshToken", result.refreshToken);
       updateAccessToken(result.accessToken);
       updateRefreshToken(result.refreshToken);
       history.push("/profile");

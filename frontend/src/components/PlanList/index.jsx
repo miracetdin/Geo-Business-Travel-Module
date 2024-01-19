@@ -2,10 +2,13 @@ import React, { Fragment, useContext, useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import {
-    createCityApi,
-    getCityListApi,
-    updateCityApi,
-    deleteCityApi,
+    createPlanApi,
+    getPlansListApi,
+    updatePlanApi,
+    deletePlanApi,
+    profileApi,
+    usersApi,
+    citiesApi
   } from "../api/apiFunctions";
 import useSWR, { mutate } from "swr";
 import TokenContext from "../../contexts/tokenContext";
@@ -26,15 +29,43 @@ function TaxiFeeList() {
   const [newFeePerKm, setNewFeePerKm] = useState(0);
   const [showUpdatePopup, setShowUpdatePopup] = useState(false);
   const [showCreatePopup, setShowCreatePopup] = useState(false);
-  const [updateCity, setUpdateCity] = useState("");
+  const [rowData, setRowData] = useState("");
 
   const { data, isLoading } = useSWR(
-    `${apiUrl}/fee${currentPage}`,
+    `${apiUrl}/plan${currentPage}`,
     async (url) => {
-      const response = await getCityListApi(accessToken, currentPage, "GET");
+      const response = await getPlansListApi(accessToken, currentPage, "GET");
       return response;
     }
   );
+
+  const { data: meData, isLoading: meIsLoading } = useSWR(`${apiUrl}/auth/me`, async (url) => {
+    const response = await profileApi(accessToken, refreshToken, "POST");
+    return response;
+  });
+
+  const { data: employeeList, isLoading: userListIsLoading } = useSWR(
+    `${apiUrl}/auth/users`,
+    async (url) => {
+      const response = await usersApi(accessToken, refreshToken, "POST");
+      return response;
+    }
+  );
+
+  const { data: cities, isLoading: citiesIsLoading } = useSWR(
+    `${apiUrl}/fee/cities`,
+    async (url) => {
+      const response = await citiesApi(accessToken, refreshToken, "POST");
+      return response;
+    }
+  );
+
+  console.log("cities:", cities)
+
+  const findUserByName = (username) => {
+    const user = employeeList.find((user) => user.username === username);
+    return user ? `${user.name} ${user.surname} (${user.email} - ${user.username})` : "";
+  };
 
   const onPageChange = (event) => {
     setCurrentPage(event.first / event.rows + 1);
@@ -42,7 +73,7 @@ function TaxiFeeList() {
 
   const handleCreate = async () => {
     setShowCreatePopup(true);
-    await mutate(`${apiUrl}/fee`);
+    await mutate(`${apiUrl}/plan`);
   };
 
   const renderUpdateButton = (rowData) => {
@@ -58,9 +89,9 @@ function TaxiFeeList() {
   };
 
   const handleUpdate = async (rowData) => {
-    setUpdateCity(rowData);
+    setRowData(rowData);
     setShowUpdatePopup(true);
-    await mutate(`${apiUrl}/fee${rowData.city}`);
+    await mutate(`${apiUrl}/plan/${rowData._id}`);
   };
 
   const closePopup = () => {
@@ -81,11 +112,11 @@ function TaxiFeeList() {
   };
 
   const handleDelete = async (rowData) => {
-    await deleteCityApi(
+    await deletePlanApi(
       accessToken,
-      rowData.city,
+      rowData._id,
     );
-    await mutate(`${apiUrl}/fee${rowData.city}`);
+    await mutate(`${apiUrl}/plan/${rowData._id}`);
   };
 
   return (
@@ -104,7 +135,7 @@ function TaxiFeeList() {
               </button>
             </div>
             <div className="card">
-              <h2 className="pt-3">Taxi Fee List</h2>
+              <h2 className="pt-3">Travel Plan List</h2>
               {/* {!isLoading && !userListIsLoading && !accountantIsLoading && ( */}
               {(
                 <DataTable
@@ -122,23 +153,37 @@ function TaxiFeeList() {
                 >
                   <Column
                     className={style.customColumn}
-                    field="city"
-                    header="City"
+                    field="employeeUsername"
+                    header="Employee"
+                    body={(rowData) => findUserByName(rowData.employeeUsername)}
                     filter
-                    filterField="city"
+                    filterField="employeeUsername"
                     showFilterMenu={false}
                   ></Column>
                   <Column
                     className={style.customColumn}
-                    field="openingFee"
-                    header="Opening Fee (TL)"
-                    sortable={(!showCreatePopup && !showUpdatePopup) ? "true" : "false"}
+                    field="travelDate"
+                    header="Travel Date"
+                    filter
+                    filterField="travelDate"
+                    showFilterMenu={false}
                   ></Column>
                   <Column
                     className={style.customColumn}
-                    field="feePerKm"
-                    header="Fee/Km (TL)"
-                    sortable={(!showCreatePopup && !showUpdatePopup) ? "true" : "false"}
+                    field="endLocation"
+                    header="Destination"
+                    filter
+                    filterField="endLocation"
+                    showFilterMenu={false}
+                  ></Column>
+                  <Column
+                    className={style.customColumn}
+                    field="accountantUsername"
+                    header="Assigned By Accountant"
+                    body={(rowData) => findUserByName(rowData.accountantUsername)}
+                    filter
+                    filterField="accountantUsername"
+                    showFilterMenu={false}
                   ></Column>
                   <Column
                     className={style.customDetailsColumn}
@@ -157,17 +202,23 @@ function TaxiFeeList() {
         </div>
       </div>
       <div id="popup-update"></div>
-      {showUpdatePopup && (
+      {showUpdatePopup && !meIsLoading && !userListIsLoading && !citiesIsLoading && (
         <UpdatePopup
           onClose={closePopup}
-          rowData={updateCity}
+          rowData={rowData}
           accessToken={accessToken}
+          cityList={cities}
+          meData={meData}
           style={style.popupStyle}
         />
       )}
       <div id="popup-create"></div>
-      {showCreatePopup && (
+      {showCreatePopup && !meIsLoading && !userListIsLoading && !citiesIsLoading && (
         <CreatePopup
+          accessToken={accessToken}
+          meData={meData}
+          employeeList={employeeList}
+          cityList={cities}
           onClose={closePopup}
           style={style.popupStyle}
         />
