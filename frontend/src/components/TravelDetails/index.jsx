@@ -34,7 +34,7 @@ function TravelDetails() {
 
   const findUserByName = (username) => {
     const user = userList.find((user) => user.username === username);
-    return user ? `${user.name} ${user.surname}` : "";
+    return user ? `${user.name} ${user.surname} (${user.email} - ${user.username})` : "";
   };
 
   const { data, isLoading } = useSWR(
@@ -130,22 +130,22 @@ function TravelDetails() {
                   <Column
                     className={style.customColumn}
                     field="invoiceInfo"
-                    header="Travel Distance"
+                    header="Travel Distance (Km)"
                   ></Column>
-                  <Column
+                  {/* <Column
                     className={style.customColumn}
                     field="invoiceNote"
                     header="Invoice Note"
-                  ></Column>
+                  ></Column> */}
                   <Column
                     className={style.customColumn}
                     field="invoicePrice"
-                    header="Invoice Price"
+                    header="Invoice Price  (TL)"
                   ></Column>
                   <Column
                     className={style.customColumn}
                     field="priceEstimate"
-                    header="Price Estimate"
+                    header="Price Estimate  (TL)"
                   ></Column>
                   <Column
                     className={style.customColumn}

@@ -63,13 +63,13 @@ const Delete = async (req, res, next) => {
   }
 };
 
-const limit = 10;
+// const limit = 10;
 const GetList = async (req, res, next) => {
   let { page } = req.query;
 
-  if (page < 1) {
-  	page = 1;
-  }
+  // if (page < 1) {
+  // 	page = 1;
+  // }
 
   const { user_id } = req.payload;
   
@@ -80,7 +80,7 @@ const GetList = async (req, res, next) => {
 	  next(e);
   }
 
-  const skip = (parseInt(page) - 1) * limit;
+  // const skip = (parseInt(page) - 1) * limit;
 
   try {
     let plans = null;
@@ -88,14 +88,14 @@ const GetList = async (req, res, next) => {
     if (user.role === "employee") {
         plans = await Plan.find({ employeeUsername: user.username })
   	  .sort({ createdAt: -1 })
-  	  .skip(skip)
-  	  .limit(limit);
+  	  // .skip(skip)
+  	  // .limit(limit);
     }
     else {
         plans = await Plan.find({})
   	  .sort({ createdAt: -1 })
-  	  .skip(skip)
-  	  .limit(limit);
+  	  // .skip(skip)
+  	  // .limit(limit);
     }
 
 	  res.json(plans);

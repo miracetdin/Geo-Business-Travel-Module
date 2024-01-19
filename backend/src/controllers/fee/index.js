@@ -72,25 +72,25 @@ const Delete = async (req, res, next) => {
   }
 };
 
-const limit = 10;
+// const limit = 10;
 const GetList = async (req, res, next) => {
-  let { page } = req.query;
+  // let { page } = req.query;
 
-  if (page < 1) {
-    page = 1;
-  }
+  // if (page < 1) {
+  //   page = 1;
+  // }
 
   const { city } = req.payload;
 
-  const skip = (parseInt(page) - 1) * limit;
+  // const skip = (parseInt(page) - 1) * limit;
 
   try {
     let feeList = null;
 
     feeList = await Fee.find({})
     .sort({city: 1})
-    .skip(skip)
-    .limit(limit);
+    // .skip(skip)
+    // .limit(limit);
 
     res.json(feeList);
   } catch (e) {

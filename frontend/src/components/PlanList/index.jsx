@@ -61,6 +61,11 @@ function TaxiFeeList() {
 
   console.log("cities:", cities)
 
+  const findUserByName = (username) => {
+    const user = employeeList.find((user) => user.username === username);
+    return user ? `${user.name} ${user.surname} (${user.email} - ${user.username})` : "";
+  };
+
   const onPageChange = (event) => {
     setCurrentPage(event.first / event.rows + 1);
   };
@@ -137,31 +142,47 @@ function TaxiFeeList() {
                   value={data}
                   tableStyle={{ minWidth: "50rem", maxWidth: "100%" }}
                 //   rowClassName={rowClassName}
-                  onPage={onPageChange}
+                  onPageChange={onPageChange}
                   paginator={true}
-                  rows={10}
+                  rows={5}
                   totalRecords={data ? data.length : 0}
-                  scrollable={""}
+                  filterDisplay={(!showCreatePopup && !showUpdatePopup) ? "row" : false}
+                  scrollable={(!showCreatePopup && !showUpdatePopup) ? "vertical" : false}
+                  scrollHeight={(!showCreatePopup && !showUpdatePopup) ? "500px" : false}
                 >
                   <Column
                     className={style.customColumn}
                     field="employeeUsername"
                     header="Employee"
+                    body={(rowData) => findUserByName(rowData.employeeUsername)}
+                    filter
+                    filterField="employeeUsername"
+                    showFilterMenu={false}
                   ></Column>
                   <Column
                     className={style.customColumn}
                     field="travelDate"
                     header="Travel Date"
+                    filter
+                    filterField="travelDate"
+                    showFilterMenu={false}
                   ></Column>
                   <Column
                     className={style.customColumn}
                     field="endLocation"
                     header="Destination"
+                    filter
+                    filterField="endLocation"
+                    showFilterMenu={false}
                   ></Column>
                   <Column
                     className={style.customColumn}
                     field="accountantUsername"
                     header="Assigned By Accountant"
+                    body={(rowData) => findUserByName(rowData.employeeUsername)}
+                    filter
+                    filterField="accountantUsername"
+                    showFilterMenu={false}
                   ></Column>
                   <Column
                     className={style.customDetailsColumn}

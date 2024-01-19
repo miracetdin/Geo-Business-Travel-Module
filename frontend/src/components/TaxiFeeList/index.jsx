@@ -111,26 +111,33 @@ function TaxiFeeList() {
                   value={data}
                   tableStyle={{ minWidth: "50rem", maxWidth: "100%" }}
                 //   rowClassName={rowClassName}
-                  onPage={onPageChange}
+                  onPageChange={onPageChange}
                   paginator={true}
-                  rows={10}
+                  rows={5}
                   totalRecords={data ? data.length : 0}
-                  scrollable={""}
+                  filterDisplay={(!showCreatePopup && !showUpdatePopup) ? "row" : false}
+                  scrollable={(!showCreatePopup && !showUpdatePopup) ? "vertical" : false}
+                  scrollHeight={(!showCreatePopup && !showUpdatePopup) ? "500px" : false}
                 >
                   <Column
                     className={style.customColumn}
                     field="city"
                     header="City"
+                    filter
+                    filterField="city"
+                    showFilterMenu={false}
                   ></Column>
                   <Column
                     className={style.customColumn}
                     field="openingFee"
-                    header="Opening Fee"
+                    header="Opening Fee (TL)"
+                    sortable={(!showCreatePopup && !showUpdatePopup) ? "true" : "false"}
                   ></Column>
                   <Column
                     className={style.customColumn}
                     field="feePerKm"
-                    header="Fee/Km"
+                    header="Fee/Km (TL)"
+                    sortable={(!showCreatePopup && !showUpdatePopup) ? "true" : "false"}
                   ></Column>
                   <Column
                     className={style.customDetailsColumn}
