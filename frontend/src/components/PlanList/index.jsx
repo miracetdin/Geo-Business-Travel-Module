@@ -21,7 +21,9 @@ import { Button } from "bootstrap";
 function TaxiFeeList() {
   const [currentPage, setCurrentPage] = useState(1);
   const apiUrl = "http://localhost:4000";
-  const { accessToken, refreshToken } = useContext(TokenContext);
+  //const { accessToken, refreshToken } = useContext(TokenContext);
+  let accessToken = sessionStorage.getItem("accessToken");
+  let refreshToken = sessionStorage.getItem("refreshToken");
   const [newOpeningFee, setNewOpeningFee] = useState(0);
   const [newFeePerKm, setNewFeePerKm] = useState(0);
   const [showUpdatePopup, setShowUpdatePopup] = useState(false);

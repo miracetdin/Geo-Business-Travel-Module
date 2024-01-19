@@ -10,6 +10,8 @@ function Navbar() {
   const { updateAccessToken, updateRefreshToken } = useContext(TokenContext);
 
   const handleLogout = () => {
+    sessionStorage.removeItem("accessToken")
+    sessionStorage.removeItem("refreshToken")
     updateAccessToken(null);
     updateRefreshToken(null);
     history.push("/login");

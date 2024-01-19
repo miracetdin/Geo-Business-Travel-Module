@@ -12,7 +12,9 @@ import TokenContext from "../../contexts/tokenContext";
 
 const CreatePopup = ({ accessToken, onClose, meData, employeeList, cityList }) => {
   const apiUrl = "http://localhost:4000";
-  const { accessToken2, refreshToken } = useContext(TokenContext);
+  // const { accessToken2, refreshToken } = useContext(TokenContext);
+  let accessToken2 = sessionStorage.getItem("accessToken");
+  let refreshToken = sessionStorage.getItem("refreshToken");
 
   const [employeeUsername, setEmployeeUsername] = useState("");
   const [travelDate, setTravelDate] = useState("");

@@ -6,8 +6,13 @@ import Navbar from "../Navbar/index";
 import style from "./styles.module.css";
 
 function Profile() {
-  const { accessToken, refreshToken } = useContext(TokenContext);
+  // const { accessToken, refreshToken } = useContext(TokenContext);
   const apiUrl = "http://localhost:4000";
+
+  let accessToken = sessionStorage.getItem("accessToken");
+  let refreshToken = sessionStorage.getItem("refreshToken");
+
+  console.log("accessToken: ", accessToken)
 
   const { data, isLoading } = useSWR(`${apiUrl}/auth/me`, async (url) => {
     const response = await profileApi(accessToken, refreshToken, "POST");

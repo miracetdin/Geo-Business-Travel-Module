@@ -17,7 +17,9 @@ function Travels() {
   const [currentPage, setCurrentPage] = useState(1);
   const apiUrl = "http://localhost:4000";
   const history = useHistory();
-  const { accessToken, refreshToken } = useContext(TokenContext);
+  // const { accessToken, refreshToken } = useContext(TokenContext);
+  let accessToken = sessionStorage.getItem("accessToken");
+  let refreshToken = sessionStorage.getItem("refreshToken");
 
   const { data, isLoading } = useSWR(
     `${apiUrl}/travel${currentPage}`,

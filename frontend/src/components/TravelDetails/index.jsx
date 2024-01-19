@@ -14,7 +14,9 @@ function TravelDetails() {
   const { id } = useParams();
   const travelId = id;
   const apiUrl = "http://localhost:4000";
-  const { accessToken, refreshToken } = useContext(TokenContext);
+  // const { accessToken, refreshToken } = useContext(TokenContext);
+  let accessToken = sessionStorage.getItem("accessToken");
+  let refreshToken = sessionStorage.getItem("refreshToken");
   const {
     invoicePhoto,
     updateInvoicePhoto,

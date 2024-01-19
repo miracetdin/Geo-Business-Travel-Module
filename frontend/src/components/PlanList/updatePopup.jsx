@@ -8,7 +8,9 @@ import {
 
 const UpdatePopup = ({ onClose, rowData, accessToken, meData }) => {
   const apiUrl = "http://localhost:4000";
-  const { accessToken2, refreshToken } = useContext(TokenContext);
+  // const { accessToken2, refreshToken } = useContext(TokenContext);
+  let accessToken2 = sessionStorage.getItem("accessToken");
+  let refreshToken = sessionStorage.getItem("refreshToken");
 
   const [employeeUsername, setEmployeeUsername] = useState("");
   const [travelDate, setTravelDate] = useState("");
