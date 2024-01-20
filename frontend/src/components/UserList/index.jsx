@@ -16,6 +16,7 @@ import Navbar from "../Navbar/index";
 import style from "./styles.module.css";
 import { Button } from "bootstrap";
 import { apiBaseUrl } from '../../config/apiConfig';
+import { useHistory } from "react-router-dom";
 
 function TaxiFeeList() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -23,11 +24,8 @@ function TaxiFeeList() {
   //const { accessToken, refreshToken } = useContext(TokenContext);
   let accessToken = sessionStorage.getItem("accessToken");
   let refreshToken = sessionStorage.getItem("refreshToken");
-  const [newOpeningFee, setNewOpeningFee] = useState(0);
-  const [newFeePerKm, setNewFeePerKm] = useState(0);
-  const [showUpdatePopup, setShowUpdatePopup] = useState(false);
-  const [showCreatePopup, setShowCreatePopup] = useState(false);
-  const [rowData, setRowData] = useState("");
+
+  const history = useHistory();
 
   const { data: userList, isLoading: userIsLoading } = useSWR(
     `${apiUrl}/auth/users`,
@@ -42,8 +40,7 @@ function TaxiFeeList() {
   };
 
   const handleCreate = async () => {
-    setShowCreatePopup(true);
-    await mutate(`${apiUrl}/plan`);
+    history.push("/signup");
   };
 
   return (

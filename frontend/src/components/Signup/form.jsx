@@ -10,7 +10,8 @@ function Form() {
   const [name, setName] = useState("");
   const [surname, setSurname] = useState("");
   const [email, setEmail] = useState("");
-  const role = "accountant";
+  const [role, setRole] = useState("");
+  // const role = "accountant";
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
   const history = useHistory();
@@ -40,11 +41,11 @@ function Form() {
     //   updateSignupErrorMessage("Invalid e-mail!");
     //   updateShowSignupPopup(true);
     // }
-    else if (username.length === 5) {
+    else if (username.length < 5) {
       updateSignupErrorMessage("Username cannot be less than 5 characters!");
       updateShowSignupPopup(true);
-    } else if (password.length === 8) {
-      updateSignupErrorMessage("Password cannot be less than 5 characters!");
+    } else if (password.length < 8) {
+      updateSignupErrorMessage("Password cannot be less than 8 characters!");
       updateShowSignupPopup(true);
     } else if (password !== password2) {
       updateSignupErrorMessage("Passwords entered do not match!");
@@ -122,6 +123,31 @@ function Form() {
             onChange={(e) => setUsername(e.target.value)}
           />
         </div>
+        <div className="role mt-2">
+          <label htmlFor="role">Role:</label>
+          <select
+            className="form-control"
+            id="role"
+            name="role"
+            onChange={(e) => setRole(e.target.value)}
+            value={role}
+          >
+            <option value="" disabled></option>
+            <option value="employee">employee</option>
+            {/* <option value="admin">Admin</option> */}
+            <option value="accountant">accountant</option>
+            {/* Add more roles as needed */}
+          </select>
+          {/* <input
+            class="form-control"
+            aria-label="Large"
+            aria-describedby="inputGroup-sizing-sm"
+            type="text"
+            id="role"
+            name="role"
+            onChange={(e) => setRole(e.target.value)}
+          /> */}
+        </div>
         <div className="password mt-2">
           <label htmlFor="password">Password:</label>
           <input
@@ -152,7 +178,7 @@ function Form() {
             className={style.button}
             style={{ backgroundColor: "#F4D03F" }}
           >
-            Sign Up
+            Ok
           </button>
         </div>
       </form>

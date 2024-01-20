@@ -13,6 +13,9 @@ function Signup() {
     signupErrorMessage,
   } = useContext(PopupContext);
 
+  let accessToken = sessionStorage.getItem("accessToken");
+  let refreshToken = sessionStorage.getItem("refreshToken");
+
   const closePopup = () => {
     updateShowSignupPopup(false);
     updateSignupErrorMessage("");
@@ -30,12 +33,12 @@ function Signup() {
                   <Form />
                   <br />
                   <div className="login">
-                    <Link to="/login">
+                    <Link to="/profile">
                       <button
                         className={style.button}
                         style={{ backgroundColor: "#F4D03F" }}
                       >
-                        Login
+                        Geri
                       </button>
                     </Link>
                   </div>
