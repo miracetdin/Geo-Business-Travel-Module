@@ -8,6 +8,7 @@ import {
 const UpdatePopup = ({ onClose, rowData, accessToken }) => {
   const [openingFee, setOpeningFee] = useState(0);
   const [feePerKm, setFeePerKm] = useState(0);
+  const [shortDistance, setShortDistance] = useState(0);
   
   const handleFormSubmit = async (event) => {
     event.preventDefault();
@@ -16,6 +17,7 @@ const UpdatePopup = ({ onClose, rowData, accessToken }) => {
       rowData.city,
       openingFee,
       feePerKm,
+      shortDistance
     );
   };
 
@@ -48,6 +50,19 @@ const UpdatePopup = ({ onClose, rowData, accessToken }) => {
               placeholder="Fee/Km"
               value={feePerKm}
               onChange={(e) => setFeePerKm(e.target.value)}
+            />
+          </div>
+          <div className=" mt-2">
+            Short Distance
+            <input
+              className="form-control"
+              aria-label="Large"
+              aria-describedby="inputGroup-sizing-sm  type="
+              id="shortDistance"
+              name="shortDistance"
+              placeholder="Short Distance"
+              value={shortDistance}
+              onChange={(e) => setShortDistance(e.target.value)}
             />
           </div>
           <br />

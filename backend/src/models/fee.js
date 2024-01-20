@@ -15,6 +15,10 @@ const FeeSchema = new Schema({
   feePerKm: {
     type: Number,
     required: true,
+  },
+  shortDistance: {
+    type: Number,
+    required: true,
   }
 });
 

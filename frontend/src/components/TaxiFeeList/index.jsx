@@ -141,6 +141,12 @@ function TaxiFeeList() {
                     sortable={(!showCreatePopup && !showUpdatePopup) ? "true" : "false"}
                   ></Column>
                   <Column
+                    className={style.customColumn}
+                    field="shortDistance"
+                    header="Short Distance (TL)"
+                    sortable={(!showCreatePopup && !showUpdatePopup) ? "true" : "false"}
+                  ></Column>
+                  <Column
                     className={style.customDetailsColumn}
                     header="Update"
                     body={renderUpdateButton}

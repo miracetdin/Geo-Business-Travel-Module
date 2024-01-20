@@ -184,7 +184,7 @@ const signupApi = async (username, name, surname, email, password, role) => {
   }
 };
 
-const createCityApi = async (city, openingFee, feePerKm) => {
+const createCityApi = async (city, openingFee, feePerKm, shortDistance) => {
   try {
     const response = await fetch(`${apiUrl}/fee/`, {
       method: "POST",
@@ -195,6 +195,7 @@ const createCityApi = async (city, openingFee, feePerKm) => {
         city: city,
         openingFee: openingFee,
         feePerKm: feePerKm,
+        shortDistance: shortDistance
       }),
     });
 
@@ -257,7 +258,7 @@ const citiesApi = async (access_token, refresh_token) => {
   }
 };
 
-const updateCityApi = async (access_token, city, openingFee, feePerKm) => {
+const updateCityApi = async (access_token, city, openingFee, feePerKm, shortDistance) => {
   try {
 
     const response = await fetch(`${apiUrl}/fee/${city}`, {
@@ -268,7 +269,8 @@ const updateCityApi = async (access_token, city, openingFee, feePerKm) => {
       },
       body: JSON.stringify({
         openingFee: openingFee,
-        feePerKm: feePerKm
+        feePerKm: feePerKm,
+        shortDistance: shortDistance
       })
     })
 
