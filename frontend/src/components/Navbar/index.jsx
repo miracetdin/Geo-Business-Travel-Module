@@ -2,7 +2,8 @@ import React, { useContext } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Link, useHistory } from "react-router-dom";
 import styles from "./styles.module.css";
-import myImage from "../../images/logo.png";
+// import myImage from "../../images/logo.png";
+import myImage from "../../images/icon.png";
 import TokenContext from "../../contexts/tokenContext";
 
 function Navbar() {
@@ -25,7 +26,7 @@ function Navbar() {
             <div className="col-6">
               <ul>
                 <li>
-                  <img src={myImage} height={"35px"} />
+                  <img src={myImage} height={"40px"} style={{paddingBottom: "5px"}} />
                 </li>
                 <li>
                   <Link to="/profile">Profile</Link>
