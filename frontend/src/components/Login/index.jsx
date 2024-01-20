@@ -33,11 +33,11 @@ function Login() {
                 </h2>
                 <Form />
                 <br />
-                <div className="sign-up-div">
+                {/* <div className="sign-up-div">
                   <Link to="/signup">
                     <button className={style.button}>Sign Up</button>
                   </Link>
-                </div>
+                </div> */}
               </div>
               <div id="popup-root"></div>
               {loginErrorMessage && (
