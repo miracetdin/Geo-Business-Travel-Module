@@ -15,6 +15,7 @@ import TravelDetails from './components/TravelDetails';
 import { PopupProvider } from './contexts/popupContext';
 import TaxiFeeList from './components/TaxiFeeList';
 import PlanList from './components/PlanList';
+import UserList from './components/UserList';
 
 function App() {
   const [currentPath, setCurrentPath] = useState("/");
@@ -79,6 +80,9 @@ function App() {
                 </Route>
                 <Route path="/plan">
                   <PlanList />
+                </Route>
+                <Route path="/users">
+                  <UserList />
                 </Route>
               </Switch>
             </div>
