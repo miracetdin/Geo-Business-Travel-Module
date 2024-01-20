@@ -172,7 +172,7 @@ function Travels() {
               {!isLoading && !userListIsLoading && !accountantIsLoading && (
                 <DataTable
                   className={style.customDatatable}
-                  value={data}
+                  value={data ? data.reverse() : []}
                   tableStyle={{ minWidth: "50rem", maxWidth: "100%" }}
                   rowClassName={rowClassName}
                   onPageChange={onPageChange}
