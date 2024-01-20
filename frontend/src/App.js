@@ -47,13 +47,15 @@ function App() {
                     <div className="row">
                       <h1 style={{ fontSize: "xxx-large" }}>Geo-Business Travel</h1>
                     </div>
-                    <div className="row d-flex justify-content-between" style={{ marginTop: "10rem" }}>
-                      <div className="col-6 d-flex justify-content-end">
+                    <div className="row" style={{ marginTop: "10rem" }}>
+                      <div className='col-4'/>
+                      <div className="col-4">
                         <Link style={{ width: "100%", height: "100%" }} to="/login" onClick={handleClick}><button className="button" style={{ width: "50%", height: "180%" }}>Login</button></Link>
                       </div>
-                      <div className="col-6 d-flex justify-content-start">
+                      <div className='col-4'/>
+                      {/* <div className="col-6 d-flex justify-content-start">
                         <Link style={{ width: "100%", height: "100%" }} to="/signup" onClick={handleClick}><button className="button" style={{ width: "50%", height: "180%" }}>Sign Up</button></Link>
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 </div>
