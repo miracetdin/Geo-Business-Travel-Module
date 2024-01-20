@@ -44,6 +44,7 @@ function App() {
                 showHome &&
                 <div>
                   <div className="container" style={{ marginTop: "6rem" }}>
+                    {/* <img src='\images\logo.png' alt='logo' width={"100rem"} height={"100rem"} /> */}
                     <div className="row">
                       <h1 style={{ fontSize: "xxx-large" }}>Geo-Business Travel</h1>
                     </div>

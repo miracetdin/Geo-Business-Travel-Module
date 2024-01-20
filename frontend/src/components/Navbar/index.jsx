@@ -31,16 +31,16 @@ function Navbar() {
                   <Link to="/profile">Profile</Link>
                 </li>
                 <li>
-                  <Link to="/travel">Travel</Link>
+                  <Link to="/travel">Travels</Link>
+                </li>
+                <li>
+                  <Link to="/plan">Plans</Link>
                 </li>
                 <li>
                   <Link to="/fee">Taxi Fee</Link>
                 </li>
                 <li>
-                  <Link to="/plan">Plan</Link>
-                </li>
-                <li>
-                  <Link to="/users">User List</Link>
+                  <Link to="/users">Users</Link>
                 </li>
               </ul>
             </div>
