@@ -62,7 +62,7 @@ const CreatePopup = ({ accessToken, onClose, meData, employeeList, cityList }) =
     try {
       // Google Geocoding API'ye tıklanan konumu sorgula
       const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${clickedLocation.lat},${clickedLocation.lng}&key=AIzaSyDiA-6dALFcffd3sVMwzPCue0IFk4tB0uw`
+        `https://maps.googleapis.com/maps/api/geocode/json?latlng=${clickedLocation.lat},${clickedLocation.lng}&key=api_key`
       );
   
       const data = await response.json();
@@ -127,7 +127,7 @@ const CreatePopup = ({ accessToken, onClose, meData, employeeList, cityList }) =
   const getCoordinatesForCity = async (city) => {
     try {
       const response = await fetch(
-        `https://maps.googleapis.com/maps/api/geocode/json?address=${city}&key=AIzaSyDiA-6dALFcffd3sVMwzPCue0IFk4tB0uw`
+        `https://maps.googleapis.com/maps/api/geocode/json?address=${city}&key=api_key`
       );
   
       const data = await response.json();
